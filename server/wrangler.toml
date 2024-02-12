@@ -3,6 +3,7 @@ compatibility_date = "2023-12-01"
 
 # [vars]
 # MY_VARIABLE = "production_value"
+DATABASE_URL="postgresql://sarthaksanjaycoll21:uFsaGK2N8Udi@ep-crimson-sky-00140653.us-east-2.aws.neon.tech/cohort2test?sslmode=require"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
