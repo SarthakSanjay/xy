@@ -14,17 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
-const user_1 = require("./controllers/user");
+const user_1 = __importDefault(require("./routes/user"));
+const tweet_1 = __importDefault(require("./routes/tweet"));
 const prisma = new client_1.PrismaClient();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use('/', user_1.default);
+app.use('/tweet', tweet_1.default);
 app.get("/", (req, res) => {
     res.send("Express is working fine");
 });
-app.post("/", user_1.insertUser);
-// insertUser();
-app.put('/update/:id', user_1.updateUser);
-app.get('/all', user_1.getAllUser);
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield app.listen(3000);

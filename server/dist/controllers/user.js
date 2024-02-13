@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.insertUser = exports.getAllUser = void 0;
+exports.getSpecificUser = exports.deleteUser = exports.updateUser = exports.insertUser = exports.getAllUser = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,3 +55,33 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.updateUser = updateUser;
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    yield prisma.user.delete({
+        where: { id: id }
+    });
+    res.status(200).json({
+        msg: "user deleted successfully"
+    });
+});
+exports.deleteUser = deleteUser;
+const getSpecificUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // const id : number = parseInt(req.params.id)
+    const username = req.params.username.toString();
+    const user = yield prisma.user.findUnique({
+        where: { username: username },
+        include: {
+            tweets: true
+        }
+    });
+    if (!user) {
+        return res.status(404).json({
+            msg: "user not found"
+        });
+    }
+    res.status(200).json({
+        msg: "user found",
+        user: user
+    });
+});
+exports.getSpecificUser = getSpecificUser;
