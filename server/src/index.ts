@@ -1,26 +1,30 @@
-import { Hono } from 'hono'
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
-import { createUser } from './controllers/user.controller'
+import express from 'express';
+import { PrismaClient } from "@prisma/client";
+import { getAllUser, insertUser, updateUser } from './controllers/user';
+import { Request, Response } from 'express';
 
+const prisma = new PrismaClient();
+const app = express();
+app.use(express.json())
+app.get("/", (req: Request, res: Response) => {
+    res.send("Express is working fine");
+});
 
-const prisma = new PrismaClient({
-  datasourceUrl: "postgresql://sarthaksanjaycoll21:uFsaGK2N8Udi@ep-crimson-sky-00140653.us-east-2.aws.neon.tech/cohort2test?sslmode=require",
-}).$extends(withAccelerate())
-const app = new Hono()
+app.post("/",insertUser)
+// insertUser();
+app.put('/update/:id',updateUser)
+app.get('/all',getAllUser)
+const startServer = async () => {
+    try {
+        await app.listen(3000);
+        console.log("Server is running on port 3000");
+    } catch (error) {
+        console.error("Error starting the server:", error);
+    }
+};
 
+process.on('beforeExit', async () => {
+    await prisma.$disconnect();
+});
 
-app.get('/', (c) => {
-
-  return c.text('Hello from Hono!')
-})
-
-app.post('/',async(c)=>{
-  const body = await c.req.json()
-  console.log(body);
-  const create = await createUser(body)
-  await prisma.$disconnect()
-  return c.text("user created",body)
-  
-})
-export default app
+startServer();
