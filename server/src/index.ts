@@ -1,19 +1,18 @@
 import express from 'express';
 import { PrismaClient } from "@prisma/client";
-import { getAllUser, insertUser, updateUser } from './controllers/user';
 import { Request, Response } from 'express';
-
+import userRouter from './routes/user'
+import tweetRouter from './routes/tweet'
 const prisma = new PrismaClient();
 const app = express();
 app.use(express.json())
+app.use('/',userRouter)
+app.use('/tweet',tweetRouter)
 app.get("/", (req: Request, res: Response) => {
     res.send("Express is working fine");
 });
 
-app.post("/",insertUser)
-// insertUser();
-app.put('/update/:id',updateUser)
-app.get('/all',getAllUser)
+
 const startServer = async () => {
     try {
         await app.listen(3000);
