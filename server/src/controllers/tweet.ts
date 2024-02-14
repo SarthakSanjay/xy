@@ -25,3 +25,13 @@ export const getAllTweets = async(req:Request , res:Response)=>{
         tweets:tweets
     })
 }
+
+export const deleteTweet = async(req:Request , res:Response) =>{
+    const tweetId : number = parseInt(req.params.id)
+    await prisma.tweet.delete({
+        where:{id:tweetId}
+    })
+    res.status(200).json({
+        msg:"tweet deleted"
+    })
+}
