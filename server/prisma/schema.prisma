@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement()) @unique
   username String @unique
   email String
   password String
@@ -24,10 +24,11 @@ model User {
   createOn DateTime @default(now())
 
   tweets Tweet[]
+  likes Like[]
 }
 
 model Tweet {
-  id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement()) @unique
   userId Int
   text String 
   commentCount Int? @default(0)
@@ -37,4 +38,15 @@ model Tweet {
   bookmarks Int? @default(0)
 
   user User @relation(fields: [userId],references: [id] ,onDelete: Cascade)
+  like Like[]
+}
+
+model Like {
+  id      Int      @id @default(autoincrement()) @unique
+  userId  Int @unique
+  tweetId Int @unique
+
+  // Relationships
+  user    User     @relation(fields: [userId], references: [id])
+  tweet   Tweet    @relation(fields: [tweetId], references: [id])
 }
