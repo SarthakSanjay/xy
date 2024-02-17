@@ -25,7 +25,7 @@ model User {
 
   tweets Tweet[]
   likes Like[]
-  comments Comment[]
+  repost Repost[]
 }
 
 model Tweet {
@@ -40,11 +40,11 @@ model Tweet {
 
   user User @relation(fields: [userId],references: [id] ,onDelete: Cascade)
   like Like[]
-  comments Comment[]
+  repost Repost[]
 }
 
 model Like {
-  id      Int      @id @default(autoincrement()) @unique
+  id      Int      @id @default(autoincrement()) 
   userId  Int @unique
   tweetId Int @unique
 
@@ -53,11 +53,12 @@ model Like {
   tweet   Tweet    @relation(fields: [tweetId], references: [id],onDelete:Cascade)
 }
 
-model Comment{
-  id Int @id @default(autoincrement()) @unique
+model Repost{
+  id Int @id @default(autoincrement()) 
   userId Int @unique
   tweetId Int @unique
 
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
   tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade)
 }
+
