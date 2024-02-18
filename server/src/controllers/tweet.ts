@@ -176,6 +176,18 @@ export const bookmarkTweet = async(req:Request , res:Response)=>{
         res.status(500).json({msg:"Internal server error"})
     }
 }
+export const userBookmarkedTweet = async(req:Request , res:Response)=>{
+    const userId : number = parseInt(req.params.userId)
+    const bookmarkedTweets = await prisma.bookmark.findMany({
+        where:{
+            userId:userId
+        },
+        include:{tweet:true}
+    })
+    res.status(200).json({
+        tweets:bookmarkedTweets
+    })
+}
 export const allrepostAndLikes = async(req:Request,res:Response)=>{
     const likes = await prisma.like.findMany()
     const repost = await prisma.repost.findMany()
