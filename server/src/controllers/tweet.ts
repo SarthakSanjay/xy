@@ -47,11 +47,16 @@ export const likeTweet = async(req:Request , res:Response)=>{
             }
         })
         if (existingLike) {
+            console.log(existingLike);
             await prisma.like.delete({
                 where:{
                     userId:userId,
-                    tweetId:tweetId
+                    // tweetId:tweetId
                 }
+            })
+            await prisma.tweet.update({
+                where:{id:tweetId},
+                data: {likes:{decrement:1}}
             })
             return res.status(400).json({ msg: 'You have already liked this tweet' });
         }
@@ -74,6 +79,20 @@ export const likeTweet = async(req:Request , res:Response)=>{
         res.status(500).json({msg:"Internal server error"})
     }
 }
+export const userLikedTweet = async(req:Request, res:Response)=>{
+    const userId : number = parseInt(req.params.userId)
+    const likes = await prisma.like.findMany({
+        where:{
+            userId:userId
+        },
+        include:{tweet:true}
+    })
+    
+    res.status(200).json({
+        msg:'success',
+        likes:likes
+    })
+}
 export const repostTweet = async(req:Request , res:Response)=>{
     const tweetId :number = parseInt(req.params.id)
     const userId :number = parseInt(req.params.userId) //change later
@@ -88,8 +107,11 @@ export const repostTweet = async(req:Request , res:Response)=>{
             await prisma.repost.delete({
                 where:{
                     userId:userId,
-                    tweetId:tweetId
                 }
+            })
+            await prisma.tweet.update({
+                where:{id:tweetId},
+                data: {reposts:{decrement:1}}
             })
             return res.status(400).json({ msg: 'You have already reposted this tweet' });
         }
@@ -111,4 +133,53 @@ export const repostTweet = async(req:Request , res:Response)=>{
         console.log(error.message);
         res.status(500).json({msg:"Internal server error"})
     }
+}
+
+export const bookmarkTweet = async(req:Request , res:Response)=>{
+    const tweetId :number = parseInt(req.params.id)
+    const userId :number = parseInt(req.params.userId) //change later
+    try {
+        const existingBookmark = await prisma.bookmark.findUnique({
+            where:{
+                tweetId:tweetId,
+                userId:userId
+            }
+        })
+        if (existingBookmark) {
+            await prisma.bookmark.delete({
+                where:{
+                    userId:userId,
+                }
+            })
+            await prisma.tweet.update({
+                where:{id:tweetId},
+                data: {bookmarks:{decrement:1}}
+            })
+            return res.status(400).json({ msg: 'You have already bookmarked this tweet' });
+        }
+        await prisma.bookmark.create({
+            data:{
+                tweetId:tweetId,
+                userId:userId
+            }
+        })
+
+        await prisma.tweet.update({
+            where:{id:tweetId},
+            data: {bookmarks:{increment:1}}
+        })
+        res.status(200).json({
+            msg:"tweet bookmarked successfully"
+        })
+    } catch (error:any) {
+        console.log(error.message);
+        res.status(500).json({msg:"Internal server error"})
+    }
+}
+export const allrepostAndLikes = async(req:Request,res:Response)=>{
+    const likes = await prisma.like.findMany()
+    const repost = await prisma.repost.findMany()
+    res.status(200).json({
+        likes,repost
+    })
 }
