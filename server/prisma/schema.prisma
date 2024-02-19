@@ -15,12 +15,11 @@ model User {
   username String @unique
   email String
   password String
-  firstname String
-  lastname String
-  bio String
+  fullname String?
+  bio String?
   designation String
-  links String
-  location String
+  links String?
+  location String?
   createOn DateTime @default(now())
 
   tweets Tweet[]
