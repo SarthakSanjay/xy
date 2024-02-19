@@ -1,12 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
-
+import jwt from 'jsonwebtoken'
 const prisma = new PrismaClient();
 
 interface User{
     username:string,
-    firstname:string,
-    lastname:string,
+    fullname: string
     email:string,
     password:string,
     bio:string,
@@ -14,6 +13,45 @@ interface User{
     links:string,
     location:string
 }
+export const registerUser = async(req: Request , res:Response)=>{
+    const {username , fullname , email ,password ,bio ,designation ,links ,location}:User = req.body
+    const user =  await prisma.user.create({
+        data : {username , fullname , email ,password ,bio ,designation ,links ,location}
+    })
+    const token = jwt.sign({email:email,password:password}, process.env.TOKEN_SECRET as jwt.Secret)
+    console.log(token);
+
+    console.log(user);
+    // console.log(user);
+    res.status(201).json({
+        msg:"user inserted",
+        user:user,
+        token
+    })
+}
+export const loginUser = async(req:Request , res:Response)=>{
+    const {email ,password}:User = req.body
+    const token = jwt.sign({email:email,password:password},process.env.TOKEN_SECRET as jwt.Secret)
+    const user = await prisma.user.findFirst({
+        where: {
+            email: email
+        }
+    })
+    if(user?.password === password){
+        return res.status(200).json({
+            msg:"login success",
+            token
+        })
+    }
+    
+    console.log(user);
+    // console.log(user);
+    res.status(404).json({
+        msg:"not authorized",
+    })
+}
+
+
 export const getAllUser = async(req:Request , res:Response)=>{
     const users = await prisma.user.findMany()
     res.status(200).json({
@@ -21,18 +59,7 @@ export const getAllUser = async(req:Request , res:Response)=>{
         users:users
     })
 }
-export const insertUser = async(req: Request , res:Response)=>{
-    const body:User = req.body
-    const user =  await prisma.user.create({
-        data : body
-    })
-    console.log(body);
-    // console.log(user);
-    res.status(201).json({
-        msg:"user inserted",
-        user:user
-    })
-}
+
 
 export const updateUser = async(req:Request , res:Response) =>{
     const field = req.body
