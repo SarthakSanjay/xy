@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
+import { CustomRequest } from "../middleware/authMiddleware";
 const prisma = new PrismaClient();
 
 interface User{
@@ -43,7 +44,7 @@ export const loginUser = async(req:Request , res:Response)=>{
             token
         })
     }
-    
+
     console.log(user);
     // console.log(user);
     res.status(404).json({
@@ -52,8 +53,9 @@ export const loginUser = async(req:Request , res:Response)=>{
 }
 
 
-export const getAllUser = async(req:Request , res:Response)=>{
+export const getAllUser = async(req:CustomRequest , res:Response)=>{
     const users = await prisma.user.findMany()
+    console.log(req.user?.id);
     res.status(200).json({
         msg:"success",
         users:users
@@ -61,9 +63,9 @@ export const getAllUser = async(req:Request , res:Response)=>{
 }
 
 
-export const updateUser = async(req:Request , res:Response) =>{
+export const updateUser = async(req:CustomRequest , res:Response) =>{
     const field = req.body
-    const id :number = parseInt(req.params.id)
+    const id :number = req.user?.id
     console.log('field',field , "id",id);
     const existingUser = await prisma.user.findUnique({
         where:{
@@ -87,8 +89,8 @@ export const updateUser = async(req:Request , res:Response) =>{
     });
 }
 
-export const deleteUser = async(req:Request , res:Response)=>{
-    const id : number = parseInt(req.params.id)
+export const deleteUser = async(req:CustomRequest , res:Response)=>{
+    const id : number = req.user?.id
     await prisma.user.delete({
         where:{id:id}
     })
