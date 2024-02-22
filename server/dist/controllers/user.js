@@ -8,34 +8,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSpecificUser = exports.deleteUser = exports.updateUser = exports.insertUser = exports.getAllUser = void 0;
+exports.getSpecificUser = exports.deleteUser = exports.updateUser = exports.getAllUser = exports.loginUser = exports.registerUser = void 0;
 const client_1 = require("@prisma/client");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const prisma = new client_1.PrismaClient();
+const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, fullname, email, password, bio, designation, links, location } = req.body;
+    const user = yield prisma.user.create({
+        data: { username, fullname, email, password, bio, designation, links, location }
+    });
+    const token = jsonwebtoken_1.default.sign({ email: email, password: password }, process.env.TOKEN_SECRET);
+    console.log(token);
+    console.log(user);
+    // console.log(user);
+    res.status(201).json({
+        msg: "user inserted",
+        user: user,
+        token
+    });
+});
+exports.registerUser = registerUser;
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    const token = jsonwebtoken_1.default.sign({ email: email, password: password }, process.env.TOKEN_SECRET);
+    const user = yield prisma.user.findFirst({
+        where: {
+            email: email
+        }
+    });
+    if ((user === null || user === void 0 ? void 0 : user.password) === password) {
+        return res.status(200).json({
+            msg: "login success",
+            token
+        });
+    }
+    console.log(user);
+    // console.log(user);
+    res.status(404).json({
+        msg: "not authorized",
+    });
+});
+exports.loginUser = loginUser;
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const users = yield prisma.user.findMany();
+    console.log((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
     res.status(200).json({
         msg: "success",
         users: users
     });
 });
 exports.getAllUser = getAllUser;
-const insertUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const body = req.body;
-    const user = yield prisma.user.create({
-        data: body
-    });
-    console.log(body);
-    // console.log(user);
-    res.status(201).json({
-        msg: "user inserted",
-        user: user
-    });
-});
-exports.insertUser = insertUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     const field = req.body;
-    const id = parseInt(req.params.id);
+    const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
     console.log('field', field, "id", id);
     const existingUser = yield prisma.user.findUnique({
         where: {
