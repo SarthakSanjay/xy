@@ -3,8 +3,12 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
 import userRouter from './routes/user'
 import tweetRouter from './routes/tweet'
+import cors from 'cors'
 const prisma = new PrismaClient();
 const app = express();
+app.use(cors({
+    origin:"*"
+}))
 app.use(express.json())
 app.use('/',userRouter)
 app.use('/tweet',tweetRouter)
