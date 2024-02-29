@@ -8,7 +8,8 @@ export interface CustomRequest extends ExpressRequest {
 }
 interface user{
     id:number,
-    email:string
+    email:string,
+    username:string
 }
 export const authMiddleware = async(req:CustomRequest , res:Response , next:NextFunction)=>{
     const token = req.headers.authorization?.split(' ')[1]
@@ -34,7 +35,8 @@ export const authMiddleware = async(req:CustomRequest , res:Response , next:Next
         }
         let userObj:user = {
             id: user.id,
-            email: user.email
+            email: user.email,
+            username:user.username
         };
         req.user = userObj
         next()
