@@ -8,7 +8,7 @@ import RightBar from './layout/rightSection/RightBar'
 
 
 function App() {
-  const [isLoggedIn , setIsLoggedIn] = useState(true)
+  const [isLoggedIn , setIsLoggedIn] = useState(false)
   useEffect(()=>{
     if(Cookies.get('token')){
       setIsLoggedIn(true)
