@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useForm  } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import Cookies from "js-cookie";
@@ -28,6 +29,7 @@ const formSchema = z.object({
 });
 
 export function Register() {
+  const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,6 +43,7 @@ export function Register() {
    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/register`, values)
     .then(res=>{
         Cookies.set('token',res.data.token)
+        navigate('/')
     })
   }
   return (
