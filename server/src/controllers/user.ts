@@ -118,3 +118,12 @@ export const getSpecificUser = async(req:Request , res:Response)=>{
     })
 }
 
+export const displayUsername = async(req:CustomRequest , res:Response)=>{
+    const username:string = req.user?.username
+    if(!username){
+        return res.json({})
+    }
+    res.status(200).json({
+        username
+    })
+}
