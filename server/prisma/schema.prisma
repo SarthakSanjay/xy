@@ -17,7 +17,7 @@ model User {
   password String
   fullname String?
   bio String?
-  designation String
+  designation String?
   links String?
   location String?
   createOn DateTime @default(now())
@@ -37,6 +37,7 @@ model Tweet {
   likes Int? @default(0)
   views Int? @default(0)
   bookmarks Int? @default(0)
+  createOn DateTime @default(now())
 
   user User @relation(fields: [userId],references: [id] ,onDelete: Cascade)
   like Like[]
