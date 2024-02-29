@@ -11,9 +11,10 @@ import {
   } from "@/components/ui/alert-dialog"
   import { Button } from "@/components/ui/button"
 import Cookies from "js-cookie"
-
+import { useNavigate } from "react-router-dom"
   
   export function Logout() {
+    const navigate = useNavigate()
     return (
       <AlertDialog>
         <AlertDialogTrigger asChild>
@@ -27,6 +28,7 @@ import Cookies from "js-cookie"
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={()=>{
                 Cookies.remove('token')
+                navigate('/auth')
             }}>Logout</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
