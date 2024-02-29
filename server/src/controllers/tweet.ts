@@ -19,7 +19,19 @@ export const postTweet = async(req:Request , res:Response) =>{
 }
 
 export const getAllTweets = async(req:Request , res:Response)=>{
-    const tweets = await prisma.tweet.findMany()
+    const tweets = await prisma.tweet.findMany({
+        select:{
+            id:true,
+            text:true,
+            commentCount:true,
+            reposts:true,
+            likes:true,
+            views:true,
+            bookmarks :true,
+            createOn:true,
+            user:true
+        }
+    })
     res.status(200).json({
         msg:"success",
         tweets:tweets
