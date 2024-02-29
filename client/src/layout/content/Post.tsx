@@ -15,8 +15,8 @@ const Post: React.FC<PostProps> = ({ tweet }) => {
       <div className="h-full w-full">
         <div className="flex justify-between my-2">
           <div className="flex gap-2 mx-2 text-gray-500">
-            <h1 className="text-white">{tweet.id}</h1>
-            <h2>{tweet.id}</h2>.<h2>time</h2>
+            <h1 className="text-white">{tweet.user.fullname}</h1>
+            <h2>{tweet.user.username}</h2>.<h2>{new Date(tweet.createOn).getHours() +"h"}</h2>
           </div>
           <More />
         </div>
