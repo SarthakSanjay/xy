@@ -24,7 +24,6 @@ const Content = () => {
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/tweet/all`).then((res) => {
-      console.log(res.data.tweets);
       setPost(res.data.tweets);
     });
   }, []);
@@ -33,7 +32,6 @@ const Content = () => {
       <Header />
       <Tweet />
       {post.map((tweet: tweet) => {
-        console.log("tweet", tweet);
         return <Post key={tweet.id} tweet={tweet} />;
       })}
     </ScrollArea>
