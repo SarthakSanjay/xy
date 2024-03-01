@@ -19,7 +19,7 @@ function App() {
     return <Auth />
   }
   return (
-      <div className='bg-black h-screen w-screen flex '>
+      <div className='dark:bg-black dark:text-white h-screen w-screen flex '>
         <Sidebar />
         <Content />
         <RightBar />
