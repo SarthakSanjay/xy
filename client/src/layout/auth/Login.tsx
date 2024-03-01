@@ -39,6 +39,7 @@ export function Login() {
    await axios.post(`${import.meta.env.VITE_API_BASE_URL}/login`, values)
     .then(res=>{
         Cookies.set('token',res.data.token)
+        Cookies.set('userId',res.data.userId)
         navigate('/')
     })
   }
