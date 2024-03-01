@@ -25,8 +25,8 @@ export const registerUser = async(req: Request , res:Response)=>{
     console.log(user);
     // console.log(user);
     res.status(201).json({
-        msg:"user inserted",
-        user:user,
+        msg:"user inserted/registered",
+        userId:user.id,
         token
     })
 }
@@ -41,6 +41,7 @@ export const loginUser = async(req:Request , res:Response)=>{
     if(user?.password === password){
         return res.status(200).json({
             msg:"login success",
+            userId:user.id,
             token
         })
     }
