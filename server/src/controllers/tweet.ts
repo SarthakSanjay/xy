@@ -3,19 +3,24 @@ import { Request, Response } from 'express';
 
 const prisma = new PrismaClient();
 
-interface Tweet {
-    userId :number,
-    text:string
-}
+
 export const postTweet = async(req:Request , res:Response) =>{
-    const body:Tweet = req.body
-    const tweet = await prisma.tweet.create({
-        data : body
-    })
-    res.status(201).json({
-        msg:"tweet posted",
-        tweet:tweet
-    })
+   try {
+     const userId :number = parseInt(req.params.userId)
+     const text:string = req.body.text
+     const tweet = await prisma.tweet.create({
+         data : {
+             userId:userId,
+             text:text
+         }
+     })
+     res.status(201).json({
+         msg:"tweet posted",
+         tweet:tweet
+     })
+   } catch (error:any) {
+    console.log(error.message);
+   }
 }
 
 export const getAllTweets = async(req:Request , res:Response)=>{
