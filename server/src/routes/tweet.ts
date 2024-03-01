@@ -2,7 +2,7 @@ import express from 'express'
 import { postTweet,getAllTweets, likeTweet, deleteTweet, repostTweet, allrepostAndLikes, userLikedTweet, userBookmarkedTweet, bookmarkTweet } from '../controllers/tweet'
 const router = express.Router()
 
-router.route('/').post(postTweet)
+router.route('/:userId').post(postTweet)
 router.route('/all').get(getAllTweets)
 router.route('/:userId/:id').put(likeTweet)
 router.route('/repost/:userId/:id').put(repostTweet)
