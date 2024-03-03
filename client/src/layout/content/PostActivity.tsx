@@ -5,16 +5,17 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { BiBarChart } from "react-icons/bi";
 import { FiBookmark } from "react-icons/fi";
 import { TbUpload } from "react-icons/tb";
+import { Comment } from "../postOpt/Comment";
+import { tweet } from "./Content";
 
+interface TweetProp{
+    tweet : tweet
+}
 
-
-
-const PostActivity = () => {
+const PostActivity: React.FC<TweetProp> = ({tweet}) => {
   return (
     <div className="flex w-full justify-between ">
-                    <Button variant={"link2"}>
-                        <LuMessageSquare />
-                    </Button>
+                    <Comment tweet={tweet} />
                     <Button variant={"link2"}>
                         <TfiLoop />
                     </Button>
