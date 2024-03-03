@@ -23,7 +23,7 @@ const Post: React.FC<PostProps> = ({ tweet }) => {
         <p className="mx-2">
             {tweet.text}
         </p>
-        <PostActivity />
+        <PostActivity tweet={tweet} />
       </div>
     </Card>
   );
