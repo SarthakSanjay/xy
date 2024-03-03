@@ -15,12 +15,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   text: z.string()
 });
 
-const Tweet = () => {
+const Tweet = ({setTweet}:any) => {
+  useEffect(()=>{console.log("useEffect form tweet")},[onSubmit])
   const navigate = useNavigate();
   console.log(Cookies.get("userId"));
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,6 +40,7 @@ const Tweet = () => {
       )
       .then((res) => {
         Cookies.set("token", res.data.token);
+        setTweet(true)
         navigate("/");
       });
   }
@@ -63,11 +66,10 @@ const Tweet = () => {
                 </FormItem>
               )}
             />
-
-            <hr className="w-2/3" />
             <Button
               type="submit"
               className="w-[100px] relative left-[410px] bg-sky-500 text-white rounded-full text-xl"
+              disabled={!form.formState.isDirty}
             >
               Post
             </Button>
