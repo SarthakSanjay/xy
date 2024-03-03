@@ -20,18 +20,19 @@ export interface tweet {
   views: number;
 }
 const Content = () => {
-  const [post, setPost] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [tweet , setTweet] = useState<boolean>(false)
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/tweet/all`).then((res) => {
-      setPost(res.data.tweets);
+      setPosts(res.data.tweets);
     });
-  }, []);
+  }, [tweet]);
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
       <Header />
-      <Tweet />
-      {post.map((tweet: tweet) => {
+      <Tweet setTweet={setTweet} />
+      {posts.map((tweet: tweet) => {
         return <Post key={tweet.id} tweet={tweet} />;
       })}
     </ScrollArea>
