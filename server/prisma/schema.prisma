@@ -43,6 +43,7 @@ model Tweet {
   like Like[]
   repost Repost[]
   bookmark Bookmark[]
+  comment Comment[]
 }
 
 model Like {
@@ -72,3 +73,11 @@ model Bookmark{
   tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade)
 }
 
+model Comment{
+  id Int @id @default(autoincrement())
+  userId Int 
+  tweetId Int
+  text String
+
+  tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade) 
+}
