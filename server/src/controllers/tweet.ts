@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
+import { CustomRequest } from "../middleware/authMiddleware";
 
 const prisma = new PrismaClient();
 
@@ -210,5 +211,51 @@ export const allrepostAndLikes = async(req:Request,res:Response)=>{
     const repost = await prisma.repost.findMany()
     res.status(200).json({
         likes,repost
+    })
+}
+
+export const addComment = async(req:CustomRequest ,  res:Response)=>{
+    const tweetId:number = parseInt(req.params.tweetId)
+    const userId: number = parseInt(req.user?.id)
+    const text : string = req.body.text
+    console.log(tweetId , userId , text);
+   try {
+     const comment = await prisma.comment.create({
+         data:{
+             tweetId:tweetId,
+             userId:userId,
+             text:text
+         }
+     })
+     await prisma.tweet.update({
+        where:{
+            id:tweetId
+        },
+        data:{
+            commentCount:{increment:1}
+        }
+     })
+     res.status(200).json({
+        msg:'successfully commented',
+        comment
+
+     })
+   } catch (error:any) {
+    console.log(error.message);
+     res.status(404).json({
+        msg:"comment failed"
+     })
+   }
+
+}
+
+export const getTweetComment = async(req:Request, res:Response)=>{
+    const tweetId:number = parseInt(req.params.tweetId)
+    const comments = await prisma.comment.findMany({
+        where:{tweetId:tweetId}
+    }) 
+    res.status(200).json({
+        msg:'success',
+        comments
     })
 }
