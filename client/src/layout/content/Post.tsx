@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import PostActivity from "./PostActivity";
 import { More } from "./More";
 import { tweet } from "./Content";
+import { Link } from "react-router-dom";
 interface PostProps {
   tweet: tweet;
   fromComment?: boolean;
@@ -37,7 +38,9 @@ const Post: React.FC<PostProps> = ({ tweet, fromComment }) => {
           <More />
         </div>
         <p>{tweet.id}</p>
-        <p className="mx-2">{tweet.text}</p>
+        <Link to={`tweet/${tweet.id}`}>
+          <p className="mx-2">{tweet.text}</p>
+        </Link>
 
         {fromComment ? (
           <p className="mx-2 text-gray-500">
