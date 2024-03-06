@@ -8,7 +8,7 @@ interface PostProps {
   tweet: tweet;
   fromComment?: boolean;
 }
-const Post: React.FC<PostProps> = ({ tweet, fromComment }) => {
+const PostedTweet: React.FC<PostProps> = ({ tweet, fromComment }) => {
   return (
     <Card
       className={`${
@@ -55,4 +55,4 @@ const Post: React.FC<PostProps> = ({ tweet, fromComment }) => {
   );
 };
 
-export default Post;
+export default PostedTweet;
