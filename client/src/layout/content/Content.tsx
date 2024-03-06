@@ -1,7 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "../Header";
-import Post from "./Post";
-import Tweet from "./Tweet";
+import Post from "./PostedTweet";
+import Tweet from "./TweetBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -33,6 +33,7 @@ const Content = () => {
       <Header />
       <Tweet setTweet={setTweet} />
       {posts.map((tweet: tweet) => {
+        console.log('tweet',tweet);
         return <Post key={tweet.id} tweet={tweet} />;
       })}
     </ScrollArea>
