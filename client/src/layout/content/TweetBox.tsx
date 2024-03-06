@@ -21,7 +21,7 @@ const formSchema = z.object({
   text: z.string()
 });
 
-const Tweet = ({setTweet, fromComment}:any ) => {
+const TweetBox = ({setTweet, fromComment}:any ) => {
   useEffect(()=>{console.log("useEffect form tweet")},[onSubmit])
   const navigate = useNavigate();
   console.log(Cookies.get("userId"));
@@ -82,4 +82,4 @@ const Tweet = ({setTweet, fromComment}:any ) => {
   );
 };
 
-export default Tweet;
+export default TweetBox;
