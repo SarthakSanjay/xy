@@ -1,11 +1,9 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Header from "../Header";
-import Post from "./Post";
-import Tweet from "./Tweet";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Label } from "@/components/ui/label";
+import PostedTweet from "./PostedTweet";
 export interface tweet {
   bookmarks: number;
   commentCount: number;
@@ -36,7 +34,7 @@ console.log(tweet);
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
         <Label>Post</Label>
-        <Post tweet={tweet} fromComment={false} />
+        <PostedTweet tweet={tweet} fromComment={false} />
       {/* {comment.map((tweet: tweet) => {
         return <Post key={tweet.id} tweet={tweet} />;
       })} */}
