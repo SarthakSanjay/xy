@@ -21,28 +21,64 @@ const formSchema = z.object({
   text: z.string()
 });
 
-const TweetBox = ({setTweet, fromComment}:any ) => {
+const TweetBox = ({setTweet, fromComment , tweetId , isComment, commentId}:any ) => {
   useEffect(()=>{console.log("useEffect form tweet")},[onSubmit])
   const navigate = useNavigate();
-  console.log(Cookies.get("userId"));
+  // console.log(Cookies.get("userId"));
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
     },
   });
+  
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    await axios
-      .post(
-        `${import.meta.env.VITE_API_BASE_URL}/tweet/${Cookies.get("userId")}`,
-        values
-      )
-      .then((res) => {
-        Cookies.set("token", res.data.token);
-        setTweet(true)
-        navigate("/");
-      });
+      if(!fromComment){
+        // console.log(values);
+        await axios
+          .post(
+            `${import.meta.env.VITE_API_BASE_URL}/tweet/${Cookies.get("userId")}`,
+            values
+          )
+          .then((res) => {
+            Cookies.set("token", res.data.token);
+            setTweet(true)
+            navigate("/");
+          });
+      }else{
+        await axios
+        .post(
+          `${import.meta.env.VITE_API_BASE_URL}/tweet/comment/${tweetId}`,
+          values,{
+            headers:{
+              "Authorization": `Bearer ${Cookies.get('token')}`
+            }
+          }
+        )
+        .then((res) => {
+          Cookies.set("token", res.data.token);
+          setTweet(true)
+          alert("commented")
+          navigate("/");
+        });
+      }
+      if(isComment){
+        await axios
+        .post(
+          `${import.meta.env.VITE_API_BASE_URL}/tweet/comment/${commentId}`,
+          values,{
+            headers:{
+              "Authorization": `Bearer ${Cookies.get('token')}`
+            }
+          }
+        )
+        .then((res) => {
+          Cookies.set("token", res.data.token);
+          setTweet(true)
+          alert("commented")
+          navigate("/");
+        });
+      }
   }
   return (
     <Form {...form}>
