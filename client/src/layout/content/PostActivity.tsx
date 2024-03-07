@@ -4,7 +4,7 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { BiBarChart } from "react-icons/bi";
 import { FiBookmark } from "react-icons/fi";
 import { TbUpload } from "react-icons/tb";
-import { tweet } from "./Content";
+import { tweet } from "../types/tweet";
 import { CommentBtn } from "../comment/CommentBtn";
 
 interface TweetProp{
