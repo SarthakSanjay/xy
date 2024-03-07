@@ -2,7 +2,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { Card } from "@/components/ui/card";
 import PostActivity from "./PostActivity";
 import { More } from "./More";
-import { tweet } from "./Content";
+import { tweet } from "../types/tweet";
 import { Link } from "react-router-dom";
 interface PostProps {
   tweet: tweet;
