@@ -26,6 +26,7 @@ model User {
   likes Like[]
   repost Repost[]
   bookmark Bookmark[]
+  comment Comment[]
 }
 
 model Tweet {
@@ -78,6 +79,13 @@ model Comment{
   userId Int 
   tweetId Int
   text String
+  commentCount Int? @default(0)
+  reposts Int? @default(0)
+  likes Int? @default(0)
+  views Int? @default(0)
+  bookmarks Int? @default(0)
+  createOn DateTime @default(now())
 
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
   tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade) 
 }
