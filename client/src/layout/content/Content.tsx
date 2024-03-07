@@ -4,21 +4,8 @@ import Post from "./PostedTweet";
 import Tweet from "./TweetBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {tweet} from '../types/tweet'
 
-export interface tweet {
-  bookmarks: number;
-  commentCount: number;
-  id:number;
-  likes: number;
-  reposts: number;
-  text: string;
-  user: {
-    username: string;
-    fullname: string;
-  };
-  createOn: string;
-  views: number;
-}
 const Content = () => {
   const [posts, setPosts] = useState([]);
   const [tweet , setTweet] = useState<boolean>(false)
@@ -33,7 +20,7 @@ const Content = () => {
       <Header />
       <Tweet setTweet={setTweet} />
       {posts.map((tweet: tweet) => {
-        console.log('tweet',tweet);
+        // console.log('tweet',tweet);
         return <Post key={tweet.id} tweet={tweet} />;
       })}
     </ScrollArea>
