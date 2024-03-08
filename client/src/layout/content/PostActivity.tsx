@@ -10,7 +10,7 @@ import { CommentBtn } from "../comment/CommentBtn";
 interface TweetProp{
     tweet : tweet
 }
-
+//original tweet activity
 const PostActivity: React.FC<TweetProp> = ({tweet}) => {
   return (
     <div className="flex w-full justify-between ">
