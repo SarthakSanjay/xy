@@ -15,20 +15,20 @@ const PostActivity: React.FC<TweetProp> = ({tweet}) => {
   return (
     <div className="flex w-full justify-between ">
                     <CommentBtn tweet={tweet} />
-                    <Button variant={"link2"}>
+                    <Button className="hover:text-green-500 hover:bg-green-500/30 rounded-full h-10 w-10 p-0" variant={"link2"}>
                         <TfiLoop />
                     </Button>
-                    <Button variant={"link2"}>
+                    <Button className="hover:text-pink-500 hover:bg-pink-500/30 rounded-full h-10 w-10 p-0" variant={"link2"}>
                         <IoMdHeartEmpty />
                     </Button>
-                    <Button variant={"link2"}>
+                    <Button className="hover:text-sky-500 hover:bg-sky-500/30 rounded-full h-10 w-10 p-0" variant={"link2"}>
                         <BiBarChart />
                     </Button>
                     <div className="mx-2 ">
-                    <Button className="px-1" variant={"link2"}>
+                    <Button className="hover:text-sky-500 hover:bg-sky-500/30 rounded-full h-10 w-10 py-0 px-1" variant={"link2"}>
                         <FiBookmark />
                     </Button>
-                    <Button className="px-1" variant={"link2"}>
+                    <Button className="hover:text-sky-500 hover:bg-sky-500/30 rounded-full h-10 w-10 py-0 px-1" variant={"link2"}>
                         <TbUpload />
                     </Button>
                     </div>
