@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
+
 const formSchema = z.object({
   email: z.string().email({ message: "please provide email" }),
   password: z.string()
@@ -43,10 +44,11 @@ export function Login() {
         navigate('/')
     })
   }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Login</Button>
+        <Button  variant="outline">Login</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="mx-auto">Login</DialogHeader>
