@@ -11,81 +11,86 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement()) @unique
-  username String @unique
-  email String @unique
-  password String
-  fullname String?
-  bio String?
+  id          Int      @id @unique @default(autoincrement())
+  username    String   @unique
+  email       String   @unique
+  password    String
+  fullname    String?
+  bio         String?
   designation String?
-  links String?
-  location String?
-  createOn DateTime @default(now())
+  links       String?
+  location    String?
+  createOn    DateTime @default(now())
 
-  tweets Tweet[]
-  likes Like[]
-  repost Repost[]
+  tweets   Tweet[]
+  likes    Like[]
+  repost   Repost[]
   bookmark Bookmark[]
-  comment Comment[]
+  comment  Comment[]
 }
 
 model Tweet {
-  id Int @id @default(autoincrement()) @unique
-  userId Int
-  text String 
-  commentCount Int? @default(0)
-  reposts Int? @default(0)
-  likes Int? @default(0)
-  views Int? @default(0)
-  bookmarks Int? @default(0)
-  createOn DateTime @default(now())
+  id           Int      @id @unique @default(autoincrement())
+  userId       Int
+  text         String
+  commentCount Int?     @default(0)
+  reposts      Int?     @default(0)
+  likes        Int?     @default(0)
+  views        Int?     @default(0)
+  bookmarks    Int?     @default(0)
+  createOn     DateTime @default(now())
 
-  user User @relation(fields: [userId],references: [id] ,onDelete: Cascade)
-  like Like[]
-  repost Repost[]
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  like     Like[]
+  repost   Repost[]
   bookmark Bookmark[]
-  comment Comment[]
+  comment  Comment[]
 }
 
 model Like {
-  id      Int      @id @default(autoincrement()) 
+  id      Int @id @default(autoincrement())
   userId  Int @unique
-  tweetId Int 
+  tweetId Int
 
   // Relationships
-  user    User     @relation(fields: [userId], references: [id],onDelete:Cascade)
-  tweet   Tweet    @relation(fields: [tweetId], references: [id],onDelete:Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
 }
 
-model Repost{
-  id Int @id @default(autoincrement()) 
-  userId Int @unique
-  tweetId Int 
-
-  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
-  tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade)
-}
-model Bookmark{
-  id Int @id @default(autoincrement()) 
-  userId Int @unique
-  tweetId Int 
-
-  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
-  tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade)
-}
-
-model Comment{
-  id Int @id @default(autoincrement())
-  userId Int 
+model Repost {
+  id      Int @id @default(autoincrement())
+  userId  Int @unique
   tweetId Int
-  text String
-  commentCount Int? @default(0)
-  reposts Int? @default(0)
-  likes Int? @default(0)
-  views Int? @default(0)
-  bookmarks Int? @default(0)
-  createOn DateTime @default(now())
 
-  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
-  tweet Tweet @relation(fields: [tweetId],references: [id],onDelete: Cascade) 
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+}
+
+model Bookmark {
+  id      Int @id @default(autoincrement())
+  userId  Int @unique
+  tweetId Int
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  tweetId      Int?
+  commentId    Int?
+  text         String
+  commentCount Int?     @default(0)
+  reposts      Int?     @default(0)
+  likes        Int?     @default(0)
+  views        Int?     @default(0)
+  bookmarks    Int?     @default(0)
+  createOn     DateTime @default(now())
+
+  parentComment Comment?  @relation("NestedComments", fields: [commentId], references: [id], onDelete: Cascade)
+  childComments Comment[] @relation("NestedComments")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet? @relation(fields: [tweetId], references: [id], onDelete: Cascade)
 }
