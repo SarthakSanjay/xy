@@ -50,3 +50,25 @@ export const getCommentsByTweetId = async(req:Request , res:Response)=>{
     })
    }
 }
+
+export const getChildComments = async(req:Request,res:Response)=>{
+    const commentId = parseInt(req.params.commentId)
+    try {
+        const comments = await prisma.comment.findMany({
+            where:{
+                id:commentId
+            },
+            select:{
+                childComments:true
+            }
+        })
+        res.status(200).json({
+            comments
+        })
+    } catch (error :any) {
+        res.status(404).json({
+            msg : error.message
+        })
+       }
+    
+}
