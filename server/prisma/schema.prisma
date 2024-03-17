@@ -79,7 +79,7 @@ model Comment {
   id           Int      @id @default(autoincrement())
   userId       Int
   tweetId      Int?
-  commentId    Int?
+  parentCommentId    Int?
   text         String
   commentCount Int?     @default(0)
   reposts      Int?     @default(0)
@@ -88,7 +88,7 @@ model Comment {
   bookmarks    Int?     @default(0)
   createOn     DateTime @default(now())
 
-  parentComment Comment?  @relation("NestedComments", fields: [commentId], references: [id], onDelete: Cascade)
+  parentComment Comment?  @relation("NestedComments", fields: [parentCommentId], references: [id], onDelete: Cascade)
   childComments Comment[] @relation("NestedComments")
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
