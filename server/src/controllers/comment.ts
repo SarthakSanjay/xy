@@ -39,6 +39,16 @@ export const getCommentsByTweetId = async(req:Request , res:Response)=>{
      const comments = await prisma.comment.findMany({
          where:{
              tweetId:tweetId
+         },
+         select:{
+            id:true,
+            bookmarks:true,
+            likes:true,
+            reposts:true,
+            createOn:true,
+            text:true,
+            views:true,
+            user:true
          }
      })
      res.status(200).json({
@@ -59,7 +69,18 @@ export const getChildComments = async(req:Request,res:Response)=>{
                 id:commentId
             },
             select:{
-                childComments:true
+                childComments:{
+                    select:{
+                        id:true,
+                        bookmarks:true,
+                        likes:true,
+                        reposts:true,
+                        createOn:true,
+                        text:true,
+                        views:true,
+                        user:true
+                    }
+                }
             }
         })
         res.status(200).json({
