@@ -25,25 +25,26 @@ const CommentDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${commentId}`)
+      .get(`${import.meta.env.VITE_API_BASE_URL}/comment/getChildComments/${commentId}`)
       .then((res) => {
-        setTweet(res.data.tweet);
-        
-        axios
-          .get(
-            `${
-              import.meta.env.VITE_API_BASE_URL
-            }/tweet/comment/all/${commentId}`
-          )
-          .then((res) => {
-            setComment(res.data.comments);
-          });
+        // setTweet(res.data.tweet);
+        setComment(res.data.comments[0].childComments);
+        console.log(res.data.comments[0].childComments);
+        // axios
+        //   .get(
+        //     `${
+        //       import.meta.env.VITE_API_BASE_URL
+        //     }/tweet/comment/all/${commentId}`
+        //   )
+        //   .then((res) => {
+        //     setComment(res.data.comments);
+        //   });
       });
   }, []);
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
       <Label>Post</Label>
-      <Comment comment={tweet} fromComment={true} />
+      {/* <Comment comment={tweet} fromComment={true} /> */}
       {comment.map((comment: comment) => {
         return <Comment key={comment.id} comment={comment} />;
       })}
