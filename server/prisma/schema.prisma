@@ -33,7 +33,6 @@ model Tweet {
   id           Int      @id @unique @default(autoincrement())
   userId       Int
   text         String
-  commentCount Int?     @default(0)
   reposts      Int?     @default(0)
   likes        Int?     @default(0)
   views        Int?     @default(0)
@@ -81,7 +80,6 @@ model Comment {
   tweetId      Int?
   parentCommentId    Int?
   text         String
-  commentCount Int?     @default(0)
   reposts      Int?     @default(0)
   likes        Int?     @default(0)
   views        Int?     @default(0)
