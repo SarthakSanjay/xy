@@ -5,7 +5,7 @@ import Tweet from "./TweetBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {tweet} from '../types/tweet'
-
+//this is content section
 const Content = () => {
   const [posts, setPosts] = useState([]);
   const [tweet , setTweet] = useState<boolean>(false)
