@@ -42,7 +42,7 @@ const Comment: React.FC<CommentProp> = ({ comment, fromComment }) => {
           <More />
         </div>
         <p>{comment.id}</p>
-          <Link to={`/tweet/${comment.id}`}>
+          <Link to={`/comment/${comment.id}`}>
 
           <p className="mx-2">{comment.text}</p>
           </Link>
