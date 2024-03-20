@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
-import { CustomRequest } from "../middleware/authMiddleware";
 
 const prisma = new PrismaClient();
 
@@ -21,37 +20,84 @@ export const postTweet = async(req:Request , res:Response) =>{
      })
    } catch (error:any) {
     console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
    }
 }
 
 export const getAllTweets = async(req:Request , res:Response)=>{
-    const tweets = await prisma.tweet.findMany({
-        select:{
-            id:true,
-            text:true,
-            commentCount:true,
-            reposts:true,
-            likes:true,
-            views:true,
-            bookmarks :true,
-            createOn:true,
-            user:true
-        }
-    })
-    res.status(200).json({
-        msg:"success",
-        tweets:tweets
-    })
+  try {
+      const tweets = await prisma.tweet.findMany({
+          select:{
+              id:true,
+              text:true,
+              reposts:true,
+              likes:true,
+              views:true,
+              bookmarks :true,
+              createOn:true,
+              user:true,
+              _count:{
+                  select:{
+                      comment:true
+                  }
+              }
+          }
+      })
+      
+      res.status(200).json({
+          msg:"success",
+          tweets:tweets
+      })
+  } catch (error:any) {
+    console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
+  }
 }
-
+export const getTweetById = async(req:Request,res:Response)=>{
+    const tweetId: number = parseInt(req.params.tweetId)
+  try {
+      const tweet = await prisma.tweet.findFirst({
+          where:{
+              id:tweetId
+          },
+          select:{
+              id:true,
+              text:true,
+              reposts:true,
+              likes:true,
+              views:true,
+              bookmarks :true,
+              createOn:true,
+              user:true
+          }
+      })
+      if(!tweet){
+          return res.status(404).json({
+              msg:"no tweet found"
+          })
+      }
+      res.status(200).json({
+          msg:"tweet found",
+          tweet
+      })
+  } catch (error:any) {
+    console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
+  }
+}
 export const deleteTweet = async(req:Request , res:Response) =>{
     const tweetId : number = parseInt(req.params.id)
-    await prisma.tweet.delete({
-        where:{id:tweetId}
-    })
-    res.status(200).json({
-        msg:"tweet deleted"
-    })
+   try {
+     await prisma.tweet.delete({
+         where:{id:tweetId}
+     })
+     res.status(200).json({
+         msg:"tweet deleted"
+     })
+   } catch (error:any) {
+    console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
+   }
 }
 
 export const likeTweet = async(req:Request , res:Response)=>{
@@ -99,17 +145,22 @@ export const likeTweet = async(req:Request , res:Response)=>{
 }
 export const userLikedTweet = async(req:Request, res:Response)=>{
     const userId : number = parseInt(req.params.userId)
-    const likes = await prisma.like.findMany({
-        where:{
-            userId:userId
-        },
-        include:{tweet:true}
-    })
-    
-    res.status(200).json({
-        msg:'success',
-        likes:likes
-    })
+   try {
+     const likes = await prisma.like.findMany({
+         where:{
+             userId:userId
+         },
+         include:{tweet:true}
+     })
+     
+     res.status(200).json({
+         msg:'success',
+         likes:likes
+     })
+   } catch (error:any) {
+    console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
+   }
 }
 export const repostTweet = async(req:Request , res:Response)=>{
     const tweetId :number = parseInt(req.params.id)
@@ -196,66 +247,30 @@ export const bookmarkTweet = async(req:Request , res:Response)=>{
 }
 export const userBookmarkedTweet = async(req:Request , res:Response)=>{
     const userId : number = parseInt(req.params.userId)
-    const bookmarkedTweets = await prisma.bookmark.findMany({
-        where:{
-            userId:userId
-        },
-        include:{tweet:true}
-    })
-    res.status(200).json({
-        tweets:bookmarkedTweets
-    })
-}
-export const allrepostAndLikes = async(req:Request,res:Response)=>{
-    const likes = await prisma.like.findMany()
-    const repost = await prisma.repost.findMany()
-    res.status(200).json({
-        likes,repost
-    })
-}
-
-export const addComment = async(req:CustomRequest ,  res:Response)=>{
-    const tweetId:number = parseInt(req.params.tweetId)
-    const userId: number = parseInt(req.user?.id)
-    const text : string = req.body.text
-    console.log(tweetId , userId , text);
    try {
-     const comment = await prisma.comment.create({
-         data:{
-             tweetId:tweetId,
-             userId:userId,
-             text:text
-         }
-     })
-     await prisma.tweet.update({
-        where:{
-            id:tweetId
-        },
-        data:{
-            commentCount:{increment:1}
-        }
+     const bookmarkedTweets = await prisma.bookmark.findMany({
+         where:{
+             userId:userId
+         },
+         include:{tweet:true}
      })
      res.status(200).json({
-        msg:'successfully commented',
-        comment
-
+         tweets:bookmarkedTweets
      })
    } catch (error:any) {
     console.log(error.message);
-     res.status(404).json({
-        msg:"comment failed"
-     })
+    res.status(500).json({msg:"Internal server error"})
    }
-
 }
-
-export const getTweetComment = async(req:Request, res:Response)=>{
-    const tweetId:number = parseInt(req.params.tweetId)
-    const comments = await prisma.comment.findMany({
-        where:{tweetId:tweetId}
-    }) 
-    res.status(200).json({
-        msg:'success',
-        comments
-    })
+export const allrepostAndLikes = async(req:Request,res:Response)=>{
+   try {
+     const likes = await prisma.like.findMany()
+     const repost = await prisma.repost.findMany()
+     res.status(200).json({
+         likes,repost
+     })
+   } catch (error:any) {
+    console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
+   }
 }
