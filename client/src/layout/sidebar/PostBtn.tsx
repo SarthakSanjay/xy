@@ -5,7 +5,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import React from "react";
 import TweetBox from "../content/TweetBox";
 import { X } from "lucide-react";
 
