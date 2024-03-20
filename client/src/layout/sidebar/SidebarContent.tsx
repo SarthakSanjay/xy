@@ -11,6 +11,7 @@ import {
   CircleEllipsis,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { PostBtn } from "./PostBtn";
 const SidebarContent = () => {
   const navigate = useNavigate()
   return (
@@ -41,9 +42,7 @@ const SidebarContent = () => {
           <CircleEllipsis /> <span className="ml-2">More</span>
         </Button>
 
-        <Button className="bg-sky-500 text-white h-12 rounded-full w-56 my-5 text-lg">
-          Post
-        </Button>
+       <PostBtn />
 
         <ProfileBar />
       </div>
