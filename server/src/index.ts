@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import userRouter from './routes/user'
 import tweetRouter from './routes/tweet'
 import commentRouter from './routes/comment'
+import likeRouter from './routes/like'
 import cors from 'cors'
 const prisma = new PrismaClient();
 const app = express();
@@ -14,7 +15,7 @@ app.use(express.json())
 app.use('/',userRouter)
 app.use('/tweet',tweetRouter)
 app.use('/comment',commentRouter)
-
+app.use('/like', likeRouter)
 
 
 app.get("/", (req: Request, res: Response) => {
