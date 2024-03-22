@@ -48,7 +48,7 @@ model Tweet {
 
 model Like {
   id      Int @id @default(autoincrement())
-  userId  Int @unique
+  userId  Int 
   tweetId Int
 
   // Relationships
