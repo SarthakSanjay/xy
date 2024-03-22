@@ -8,7 +8,7 @@ export const likeTweet = async(req:Request , res:Response)=>{
     const tweetId :number = parseInt(req.params.id)
     const userId :number = parseInt(req.params.userId) //change later
     try {
-        const existingLike = await prisma.like.findUnique({
+        const existingLike = await prisma.like.findFirst({
             where:{
                 tweetId:tweetId,
                 userId:userId
@@ -16,17 +16,17 @@ export const likeTweet = async(req:Request , res:Response)=>{
         })
         if (existingLike) {
             console.log(existingLike);
+            let id = existingLike.id
             await prisma.like.delete({
                 where:{
-                    userId:userId,
-                    // tweetId:tweetId
+                    id:id
                 }
             })
             await prisma.tweet.update({
                 where:{id:tweetId},
                 data: {likes:{decrement:1}}
             })
-            return res.status(400).json({ msg: 'You have already liked this tweet' });
+            return res.status(200).json({ msg: 'like removed' });
         }
         await prisma.like.create({
             data:{
@@ -70,6 +70,7 @@ export const userLikedTweet = async(req:Request, res:Response)=>{
 export const isLikedTweet = async(req:CustomRequest , res:Response)=>{
     const userId:number = req.user?.id
     const tweetId:number = parseInt(req.params.tweetId)
+    console.log('userID',userId,'tweetId',tweetId);
     try {
       const liked =  await prisma.like.findFirst({
             where:{
@@ -78,7 +79,7 @@ export const isLikedTweet = async(req:CustomRequest , res:Response)=>{
             }
         })
         if(!liked){
-            res.status(200).json({
+           return res.status(200).json({
                 isLikedTweet:false
             })
         }
