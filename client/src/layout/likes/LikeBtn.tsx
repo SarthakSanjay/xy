@@ -10,7 +10,11 @@ interface LikeBtnProps{
 const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId}) => {
     const [isLiked , setIsLiked] = useState<boolean>(false)
     useEffect(()=>{
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/like/isLiked/${tweetId}`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/like/isLiked/${tweetId}`,{
+          headers:{
+            Authorization:`Bearer ${Cookies.get('token')}`
+          }
+        })
         .then((res)=>{
             if(res.data.isLikedTweet){
                  setIsLiked(true)
@@ -18,7 +22,7 @@ const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId}) => {
                 setIsLiked(false)
             }
         })
-    },[])
+    },[isLiked])
     const handleLike = () =>{
         let userId = Cookies.get('userId')
         axios.put(`${import.meta.env.VITE_API_BASE_URL}/like/${userId}/${tweetId}`)
