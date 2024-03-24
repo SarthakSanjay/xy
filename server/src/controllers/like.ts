@@ -26,7 +26,7 @@ export const likeTweet = async(req:Request , res:Response)=>{
                 where:{id:tweetId},
                 data: {likes:{decrement:1}}
             })
-            return res.status(200).json({ msg: 'like removed' });
+            return res.status(200).json({ msg: 'like removed  ' });
         }
         await prisma.like.create({
             data:{
