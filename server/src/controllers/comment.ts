@@ -78,7 +78,8 @@ export const getChildComments = async(req:Request,res:Response)=>{
                         createOn:true,
                         text:true,
                         views:true,
-                        user:true
+                        user:true,
+                        _count:true
                     }
                 }
             }
