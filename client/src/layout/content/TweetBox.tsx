@@ -14,15 +14,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 const formSchema = z.object({
   text: z.string()
 });
-
-const TweetBox = ({setTweet, fromComment , tweetId , isComment, commentId}:any ) => {
+// to post tweet
+const TweetBox = ({setIsTweet, fromComment , tweetId }:any ) => {
   useEffect(()=>{console.log("useEffect form tweet")},[onSubmit])
+  const tweetID = useParams()
   const navigate = useNavigate();
   // console.log(Cookies.get("userId"));
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,14 +43,14 @@ const TweetBox = ({setTweet, fromComment , tweetId , isComment, commentId}:any )
           )
           .then((res) => {
             Cookies.set("token", res.data.token);
-            setTweet(true)
+            setIsTweet(true)
             navigate("/");
           });
       }else{
         await axios
         .post(
-          `${import.meta.env.VITE_API_BASE_URL}/tweet/comment/${tweetId}`,
-          values,{
+          `${import.meta.env.VITE_API_BASE_URL}/comment/${tweetID}`,
+          {...values , parentCommentId  : tweetId},{
             headers:{
               "Authorization": `Bearer ${Cookies.get('token')}`
             }
@@ -57,24 +58,7 @@ const TweetBox = ({setTweet, fromComment , tweetId , isComment, commentId}:any )
         )
         .then((res) => {
           Cookies.set("token", res.data.token);
-          setTweet(true)
-          alert("commented")
-          navigate("/");
-        });
-      }
-      if(isComment){
-        await axios
-        .post(
-          `${import.meta.env.VITE_API_BASE_URL}/tweet/comment/${commentId}`,
-          values,{
-            headers:{
-              "Authorization": `Bearer ${Cookies.get('token')}`
-            }
-          }
-        )
-        .then((res) => {
-          Cookies.set("token", res.data.token);
-          setTweet(true)
+          setIsTweet(true)
           alert("commented")
           navigate("/");
         });
