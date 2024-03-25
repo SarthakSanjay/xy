@@ -48,7 +48,12 @@ export const getCommentsByTweetId = async(req:Request , res:Response)=>{
             createOn:true,
             text:true,
             views:true,
-            user:true
+            user:true,
+            _count:{
+                select:{
+                    childComments:true
+                }
+            }
          }
      })
      res.status(200).json({
