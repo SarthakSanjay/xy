@@ -7,7 +7,6 @@ import { createBrowserRouter ,RouterProvider } from 'react-router-dom'
 import Auth from './layout/auth/Auth.tsx'
 import TweetDetail from './layout/content/TweetDetail.tsx'
 import Content from './layout/content/Content.tsx'
-import CommentDetails from './layout/comment/CommentDetails.tsx'
 import { Login } from './layout/auth/Login.tsx'
 import Notification from './layout/notification/Notification.tsx'
 
@@ -24,10 +23,6 @@ const router = createBrowserRouter([
       {
       path:"/:username/tweet/:tweetId",
       element: <TweetDetail />
-    },
-      {
-      path:"tweet/:commentId",
-      element: <CommentDetails />
     },{
       path:'notification',
       element:<Notification />
