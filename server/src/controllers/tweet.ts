@@ -68,7 +68,12 @@ export const getTweetById = async(req:Request,res:Response)=>{
               views:true,
               bookmarks :true,
               createOn:true,
-              user:true
+              user:true,
+              _count:{
+                select:{
+                    comment:true
+                }
+              }
           }
       })
       if(!tweet){
