@@ -1,6 +1,6 @@
 export interface tweet {
     bookmarks: number;
-    _count: {comment:number};
+    _count: {comment:number,childComments:number};
     id:number;
     likes: number;
     reposts: number;
