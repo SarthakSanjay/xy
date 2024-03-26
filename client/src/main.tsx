@@ -9,6 +9,7 @@ import TweetDetail from './layout/content/TweetDetail.tsx'
 import Content from './layout/content/Content.tsx'
 import { Login } from './layout/auth/Login.tsx'
 import Notification from './layout/notification/Notification.tsx'
+import CommentDetail from './layout/content/CommentDetail.tsx'
 
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
       path:"/:username/tweet/:tweetId",
       element: <TweetDetail />
+    },
+      {
+      path:"/:username/comment/:commentId",
+      element: <CommentDetail />
     },{
       path:'notification',
       element:<Notification />
