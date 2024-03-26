@@ -7,10 +7,17 @@ import { Link } from "react-router-dom";
 interface TweetProp {
   tweet: tweet;
   fromComment?: boolean;
+  isComment?: boolean;
+  detail?: boolean;
 }
 
 //original tweet posted by user
-const Tweet: React.FC<TweetProp> = ({ tweet, fromComment }) => {
+const Tweet: React.FC<TweetProp> = ({
+  tweet,
+  fromComment,
+  isComment,
+  detail,
+}) => {
   return (
     <Card
       className={`${
@@ -40,9 +47,16 @@ const Tweet: React.FC<TweetProp> = ({ tweet, fromComment }) => {
           <More />
         </div>
         <p>{tweet.id}</p>
-        <Link to={`/${tweet.user.username}/tweet/${tweet.id}`}>
-          <p className="mx-2">{tweet.text}</p>
-        </Link>
+
+        {isComment ? (
+          <Link to={`/${tweet.user.username}/comment/${tweet.id}`}>
+            <p className="mx-2">{tweet.text}</p>
+          </Link>
+        ) : (
+          <Link to={`/${tweet.user.username}/tweet/${tweet.id}`}>
+            <p className="mx-2">{tweet.text}</p>
+          </Link>
+        )}
 
         {fromComment ? (
           <p className="mx-2 text-gray-500">
@@ -50,7 +64,10 @@ const Tweet: React.FC<TweetProp> = ({ tweet, fromComment }) => {
             <span className="text-sky-500">{tweet.user.username}</span>
           </p>
         ) : (
-          <PostActivity tweet={tweet} />
+          <div>
+            {detail ? <hr className="mt-1" /> : ""}
+            <PostActivity tweet={tweet} />
+          </div>
         )}
       </div>
     </Card>
