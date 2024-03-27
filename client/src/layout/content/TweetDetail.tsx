@@ -1,15 +1,18 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Tweet from "./Tweet";
 import { tweet } from "../types/tweet";
 import ContentHeader from "./ContentHeader";
+import Loading from "@/components/Loading";
+import useLoading from "@/hooks/useLoading";
 
 //original tweet detail page
 const TweetDetail = () => {
   const { tweetId } = useParams();
   const [comment, setComment] = useState([]);
+  const {isLoading , setLoading} = useLoading()
   const [tweet, setTweet] = useState<tweet>({
     bookmarks: 0,
     _count: { comment: 0, childComments: 0 },
@@ -25,8 +28,9 @@ const TweetDetail = () => {
   useEffect(() => {
     console.log("twwweeetIdddd", tweetId);
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${tweetId}`)
-      .then((res) => {
+    .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${tweetId}`)
+    .then((res) => {
+        setLoading(true)
         setTweet(res.data.tweet);
 
         axios
@@ -37,6 +41,7 @@ const TweetDetail = () => {
           )
           .then((res) => {
             setComment(res.data.comments);
+            setLoading(false)
           });
       });
   }, []);
@@ -44,9 +49,17 @@ const TweetDetail = () => {
     <ScrollArea className="w-full lg:w-[41.67%] border">
       <ContentHeader />
       <Tweet tweet={tweet} fromComment={false} detail={true} />
-      {comment.map((tweet: tweet) => {
+      <Suspense fallback={<Loading />}>
+
+      {
+        !isLoading ?
+      comment.map((tweet: tweet) => {
         return <Tweet key={tweet.id} tweet={tweet} isComment={true} />;
-      })}
+      })
+      :
+      <Loading />
+    }
+      </Suspense>
     </ScrollArea>
   );
 };
