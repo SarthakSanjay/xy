@@ -5,12 +5,15 @@ import { useParams } from "react-router-dom";
 import Tweet from "./Tweet";
 import { tweet } from "../types/tweet";
 import ContentHeader from "./ContentHeader";
+import useLoading from "@/hooks/useLoading";
+import Loading from "@/components/Loading";
 
 //original tweet detail page
 const CommentDetail = () => {
     const tweetId = 2
   const { commentId } = useParams();
   const [comment, setComment] = useState([]);
+  const {isLoading , setLoading} = useLoading()
   const [tweet, setTweet] = useState<tweet>({
     bookmarks: 0,
     _count: { comment: 0, childComments: 0 },
@@ -25,8 +28,9 @@ const CommentDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${tweetId}`)
-      .then((res) => {
+    .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${tweetId}`)
+    .then((res) => {
+        setLoading(true)
         setTweet(res.data.tweet);
         axios
           .get(
@@ -36,17 +40,21 @@ const CommentDetail = () => {
           )
           .then((res) => {
             setComment(res.data.comments[0].childComments);
+            setLoading(false)
           });
       });
-  }, []);
+  }, [commentId]);
   console.log('comment',comment);
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
       <ContentHeader />
       <Tweet tweet={tweet} fromComment={false} detail={true} />
-      {comment.map((tweet: tweet) => {
+      {
+        !isLoading ?
+      comment.map((tweet: tweet) => {
         return <Tweet key={tweet.id} tweet={tweet} isComment={true} />;
-      })}
+      }) : <Loading />
+      }
     </ScrollArea>
   );
 };
