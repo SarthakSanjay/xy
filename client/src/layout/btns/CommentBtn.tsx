@@ -21,10 +21,11 @@ import TweetBox from "../content/TweetBox";
     return (
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="hover:text-sky-500 hover:bg-sky-500/30 rounded-full h-10 w-10 p-0" variant={"link2"}>
+          <Button className="hover:text-sky-500 hover:bg-sky-500/30 rounded-full h-10 w-10 p-0 flex items-center" variant={"link2"}>
             <LuMessageSquare />
-            {tweet._count?.comment}
-            {tweet._count?.childComments || ""}
+            <span className="text-sm pl-1">{tweet._count?.comment}</span>
+            <span className="text-sm pl-1">{tweet._count?.childComments || ""}</span>
+            
             {/* {tweet._count?.comment  ? tweet._count?.comment : tweet._count?.childComments} */}
           </Button>
         </AlertDialogTrigger>
