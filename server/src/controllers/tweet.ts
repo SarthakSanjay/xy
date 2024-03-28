@@ -109,7 +109,7 @@ export const bookmarkTweet = async(req:Request , res:Response)=>{
     const tweetId :number = parseInt(req.params.id)
     const userId :number = parseInt(req.params.userId) //change later
     try {
-        const existingBookmark = await prisma.bookmark.findUnique({
+        const existingBookmark = await prisma.bookmark.findFirst({
             where:{
                 tweetId:tweetId,
                 userId:userId
@@ -118,7 +118,7 @@ export const bookmarkTweet = async(req:Request , res:Response)=>{
         if (existingBookmark) {
             await prisma.bookmark.delete({
                 where:{
-                    userId:userId,
+                    id:existingBookmark.id,
                 }
             })
             await prisma.tweet.update({
