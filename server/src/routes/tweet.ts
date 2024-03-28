@@ -3,7 +3,6 @@ import {
   postTweet,
   getAllTweets,
   deleteTweet,
-  repostTweet,
   allrepostAndLikes,
   userBookmarkedTweet,
   bookmarkTweet,
@@ -16,7 +15,6 @@ const router = express.Router();
 router.route("/:userId").post(postTweet);
 router.route("/all").get(getAllTweets);
 router.route("/:tweetId").get(getTweetById);
-router.route("/repost/:userId/:id").put(repostTweet);
 router.route("/:id").delete(deleteTweet);
 router.route("/bookmark/:userId/:id").put(bookmarkTweet);
 router.route("/bookmarked/:userId").get(userBookmarkedTweet);
