@@ -58,7 +58,7 @@ model Like {
 
 model Repost {
   id      Int @id @default(autoincrement())
-  userId  Int @unique
+  userId  Int 
   tweetId Int
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -67,7 +67,7 @@ model Repost {
 
 model Bookmark {
   id      Int @id @default(autoincrement())
-  userId  Int @unique
+  userId  Int 
   tweetId Int
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
