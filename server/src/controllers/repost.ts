@@ -9,7 +9,7 @@ export const repostTweet = async(req:CustomRequest , res:Response)=>{
     const userId :number = parseInt(req.user?.id) //change later
     console.log('repost',userId);
     try {
-        const existingRepost = await prisma.repost.findUnique({
+        const existingRepost = await prisma.repost.findFirst({
             where:{
                 tweetId:tweetId,
                 userId:userId
@@ -18,7 +18,7 @@ export const repostTweet = async(req:CustomRequest , res:Response)=>{
         if (existingRepost) {
             await prisma.repost.delete({
                 where:{
-                    userId:userId,
+                    id:existingRepost.id,
                 }
             })
             await prisma.tweet.update({
