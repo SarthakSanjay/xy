@@ -46,3 +46,15 @@ export const repostTweet = async(req:CustomRequest , res:Response)=>{
         res.status(500).json({msg:"Internal server error"})
     }
 }
+
+export const totalRepostByTweetId = async(req:Request , res:Response)=>{
+    const tweetId :number = parseInt(req.params.id)
+    const totalReposts = await prisma.repost.findMany({
+        where:{
+            tweetId:tweetId
+        }
+    })
+    res.status(200).json({
+        total : totalReposts.length
+    })
+}
