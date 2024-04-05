@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {Request as ExpressRequest , Response , NextFunction } from "express";
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 
 const prisma = new PrismaClient()
 export interface CustomRequest extends ExpressRequest {
@@ -18,9 +18,9 @@ export const authMiddleware = async(req:CustomRequest , res:Response , next:Next
             msg:"not authorized"
         })
     }
-    let decoded : jwt.JwtPayload
+    let decoded : JwtPayload
     try {
-        decoded = jwt.verify(token as string , process.env.TOKEN_SECRET as jwt.Secret) as jwt.JwtPayload
+        decoded = jwt.verify(token as string , process.env.TOKEN_SECRET as Secret) as JwtPayload
         const user = await prisma.user.findUnique({
             where:{
                 email: decoded.email
