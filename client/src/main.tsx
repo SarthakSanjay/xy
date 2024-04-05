@@ -22,7 +22,7 @@ const router = createBrowserRouter([
       element: <Content />
     },
       {
-      path:"/:username/tweet/:tweetId",
+      path:"/:username/tweet/:tweetID",
       element: <TweetDetail />
     },
       {
