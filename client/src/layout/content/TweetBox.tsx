@@ -13,62 +13,98 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
+import { TOKEN, USER_ID } from "@/utils/constant";
+import { TweetBoxTypes } from "../types/tweet";
 
 const formSchema = z.object({
-  text: z.string()
+  text: z.string(),
 });
 // to post tweet
-const TweetBox = ({setIsTweet, fromComment , tweetId }:any ) => {
-  useEffect(()=>{console.log("useEffect form tweet")},[onSubmit])
-  const tweetID = useParams()
+interface TweetBoxProp extends TweetBoxTypes {
+  fromComment?: boolean;
+  tweetId?: number;
+  fromContent?: boolean;
+}
+
+const TweetBox: FC<TweetBoxProp> = ({
+  fromComment,
+  tweetId,
+  fromContent,
+  isComment,
+  isChildComment,
+  isTweet,
+}) => {
+  useEffect(() => {
+    // console.log("useEffect form tweet");
+  }, [onSubmit]);
+  const { tweetID } = useParams();
   const navigate = useNavigate();
-  // console.log(Cookies.get("userId"));
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
     },
   });
-  
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-      if(!fromComment){
-        // console.log(values);
-        await axios
-          .post(
-            `${import.meta.env.VITE_API_BASE_URL}/tweet/${Cookies.get("userId")}`,
-            values
-          )
-          .then((res) => {
-            Cookies.set("token", res.data.token);
-            setIsTweet(true)
-            navigate("/");
-          });
-      }else{
-        await axios
+    if (fromContent) {
+      //post tweet
+      await axios
+        .post(`${import.meta.env.VITE_API_BASE_URL}/tweet/${USER_ID}`, values)
+        .then((res) => {
+          navigate("/");
+        });
+      console.log("this is tweet");
+      console.log("tweetId", tweetId);
+    }
+
+    if (isTweet) {
+      console.log("this is tweet");
+      await axios
         .post(
-          `${import.meta.env.VITE_API_BASE_URL}/comment/${tweetID}`,
-          {...values , parentCommentId  : tweetId},{
-            headers:{
-              "Authorization": `Bearer ${Cookies.get('token')}`
-            }
+          `${import.meta.env.VITE_API_BASE_URL}/comment/${tweetId}`,
+          values,
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
           }
         )
         .then((res) => {
-          Cookies.set("token", res.data.token);
-          setIsTweet(true)
-          alert("commented")
+          alert("commented");
           navigate("/");
         });
-      }
+    }
+
+    if (isComment) {
+      //post comment
+      await axios
+        .post(
+          `${import.meta.env.VITE_API_BASE_URL}/comment/${tweetID}`,
+          { ...values, parentCommentId: tweetId },
+          {
+            headers: {
+              Authorization: `Bearer ${TOKEN}`,
+            },
+          }
+        )
+        .then((res) => {
+          alert("clild comment commented");
+          navigate("/");
+        });
+      console.log("parent", tweetId, "params", tweetID);
+    }
   }
   return (
     <Form {...form}>
-      <Card className={`h-min flex  px-3 dark:bg-black rounded-none
-      ${fromComment? 'border-none py-0 my-0':'py-2'}
-      `}>
+      <Card
+        className={`h-min flex  px-3 dark:bg-black rounded-none
+      ${fromComment ? "border-none py-0 my-0" : "py-2"}
+      `}
+      >
         <UserAvatar />
         <div className="mx-2 w-full min-h-[140px]  flex flex-col  ">
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -79,7 +115,9 @@ const TweetBox = ({setIsTweet, fromComment , tweetId }:any ) => {
                 <FormItem>
                   <FormControl>
                     <Textarea
-                      placeholder={fromComment?"Post your reply":"What is happening?!"}
+                      placeholder={
+                        fromComment ? "Post your reply" : "What is happening?!"
+                      }
                       {...field}
                       className="h-full flex-grow text-xl dark:bg-black border-none focus-visible:ring-transparent resize-none"
                     />
@@ -90,7 +128,9 @@ const TweetBox = ({setIsTweet, fromComment , tweetId }:any ) => {
             />
             <Button
               type="submit"
-              className={`w-[100px] relative ${fromComment?'left-[370px]':'left-[410px]'} bg-sky-500 text-white rounded-full text-xl`}
+              className={`w-[100px] relative ${
+                fromComment ? "left-[370px]" : "left-[410px]"
+              } bg-sky-500 text-white rounded-full text-xl`}
               disabled={!form.formState.isDirty}
             >
               Post
