@@ -12,3 +12,10 @@ export interface tweet {
     createOn: string;
     views: number;
   }
+
+  export interface TweetBoxTypes {
+    isTweet?: boolean
+    isComment?:boolean
+    isChildComment?: boolean
+
+  }
