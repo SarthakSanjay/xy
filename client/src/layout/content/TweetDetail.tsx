@@ -10,9 +10,9 @@ import useLoading from "@/hooks/useLoading";
 
 //original tweet detail page
 const TweetDetail = () => {
-  const { tweetId } = useParams();
+  const { tweetID } = useParams();
   const [comment, setComment] = useState([]);
-  const {isLoading , setLoading} = useLoading()
+  const { isLoading, setLoading } = useLoading();
   const [tweet, setTweet] = useState<tweet>({
     bookmarks: 0,
     _count: { comment: 0, childComments: 0 },
@@ -26,39 +26,36 @@ const TweetDetail = () => {
   });
 
   useEffect(() => {
-    console.log("twwweeetIdddd", tweetId);
     axios
-    .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${tweetId}`)
-    .then((res) => {
-        setLoading(true)
+      .get(`${import.meta.env.VITE_API_BASE_URL}/tweet/${tweetID}`)
+      .then((res) => {
+        setLoading(true);
         setTweet(res.data.tweet);
 
         axios
           .get(
             `${
               import.meta.env.VITE_API_BASE_URL
-            }/comment/getCommentByTweetId/${tweetId}`
+            }/comment/getCommentByTweetId/${tweetID}`
           )
           .then((res) => {
             setComment(res.data.comments);
-            setLoading(false)
+            setLoading(false);
           });
       });
   }, []);
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
       <ContentHeader />
-      <Tweet tweet={tweet} fromComment={false} detail={true} />
+      <Tweet tweet={tweet} fromComment={false} detail={true} isTweet={true} />
       <Suspense fallback={<Loading />}>
-
-      {
-        !isLoading ?
-      comment.map((tweet: tweet) => {
-        return <Tweet key={tweet.id} tweet={tweet} isComment={true} />;
-      })
-      :
-      <Loading />
-    }
+        {!isLoading ? (
+          comment.map((tweet: tweet) => {
+            return <Tweet key={tweet.id} tweet={tweet} isComment={true} />;
+          })
+        ) : (
+          <Loading />
+        )}
       </Suspense>
     </ScrollArea>
   );
