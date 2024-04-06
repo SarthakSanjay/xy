@@ -4,10 +4,12 @@ import PostActivity from "./PostActivity";
 import { More } from "./More";
 import { tweet } from "../types/tweet";
 import { Link } from "react-router-dom";
-interface TweetProp {
+import { calculateTimeDifference } from "@/utils/date";
+import { TweetBoxTypes } from "../types/tweet";
+
+interface TweetProp extends TweetBoxTypes {
   tweet: tweet;
   fromComment?: boolean;
-  isComment?: boolean;
   detail?: boolean;
 }
 
@@ -17,6 +19,8 @@ const Tweet: React.FC<TweetProp> = ({
   fromComment,
   isComment,
   detail,
+  isChildComment,
+  isTweet
 }) => {
   return (
     <Card
@@ -42,7 +46,8 @@ const Tweet: React.FC<TweetProp> = ({
               {tweet.user.fullname}
             </h1>
             <h2>{tweet.user.username}</h2>.
-            <h2>{new Date(tweet.createOn).getHours() + "h"}</h2>
+            <h2>
+            {calculateTimeDifference(tweet.createOn)}</h2>
           </div>
           <More />
         </div>
@@ -66,7 +71,7 @@ const Tweet: React.FC<TweetProp> = ({
         ) : (
           <div>
             {detail ? <hr className="mt-1" /> : ""}
-            <PostActivity tweet={tweet} />
+            <PostActivity fromComment={fromComment} isComment={isComment} isChildComment={isChildComment} isTweet={isTweet} tweet={tweet} />
           </div>
         )}
       </div>
