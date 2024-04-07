@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
+import { CustomRequest } from "../middleware/authMiddleware";
 
 const prisma = new PrismaClient();
 
@@ -174,4 +175,42 @@ export const allrepostAndLikes = async(req:Request,res:Response)=>{
     console.log(error.message);
     res.status(500).json({msg:"Internal server error"})
    }
+}
+
+export const getTweetByUserId = async(req:CustomRequest,res:Response)=>{
+    const userId: number = parseInt(req.user?.id)
+  try {
+      const tweet = await prisma.tweet.findMany({
+          where:{
+              userId:userId
+          },
+          select:{
+              id:true,
+              text:true,
+              reposts:true,
+              likes:true,
+              views:true,
+              bookmarks :true,
+              createOn:true,
+              user:true,
+              _count:{
+                select:{
+                    comment:true
+                }
+              }
+          }
+      })
+      if(!tweet){
+          return res.status(404).json({
+              msg:"no tweet found"
+          })
+      }
+      res.status(200).json({
+          msg:"tweet found",
+          tweet
+      })
+  } catch (error:any) {
+    console.log(error.message);
+    res.status(500).json({msg:"Internal server error"})
+  }
 }
