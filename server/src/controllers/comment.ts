@@ -33,6 +33,38 @@ export const addCommentToTweet = async(req:CustomRequest ,  res:Response)=>{
 
 }
 
+export const getSpecificComment = async(req:Request , res:Response)=>{
+    const commentId = parseInt(req.params.commentId)
+   try {
+     const comment = await prisma.comment.findUnique({
+         where:{
+             id:commentId
+         },
+         select:{
+            id:true,
+            bookmarks:true,
+            likes:true,
+            reposts:true,
+            createOn:true,
+            text:true,
+            views:true,
+            user:true,
+            _count:{
+                select:{
+                    childComments:true
+                }
+            }
+         }
+     })
+     res.status(200).json({
+         comment
+     })
+   } catch (error :any) {
+    res.status(404).json({
+        msg : error.message
+    })
+   }
+}
 export const getCommentsByTweetId = async(req:Request , res:Response)=>{
     const tweetId = parseInt(req.params.tweetId)
    try {
