@@ -1,7 +1,10 @@
 import { Label } from "@/components/ui/label"
 import { ArrowLeft } from "lucide-react"
 import {useNavigate} from 'react-router-dom'
-const ContentHeader = () => {
+interface ContentHeaderProp {
+  text:string
+}
+const ContentHeader: React.FC<ContentHeaderProp> = ({text}) => {
   const navigate = useNavigate()
   return (
     <Label>
@@ -9,7 +12,7 @@ const ContentHeader = () => {
       <button onClick={()=>{
         navigate(-1)
       }}><ArrowLeft /></button>
-      <h1 className="text-xl px-7">Post</h1>
+      <h1 className="text-xl px-7">{text}</h1>
 
     </div>
     </Label>
