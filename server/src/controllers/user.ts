@@ -163,3 +163,20 @@ export const displayUsername = async(req:CustomRequest , res:Response)=>{
         res.status(500).json({msg:"Internal server error"}) 
     }
 }
+
+export const getUserProfile = async(req:CustomRequest , res:Response)=>{
+    const userId : number = parseInt(req.user?.id)
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+        res.status(200).json({
+            user
+        })
+    }  catch (error:any) {
+        console.log(error.message);
+        res.status(500).json({msg:"Internal server error"}) 
+    }
+}
