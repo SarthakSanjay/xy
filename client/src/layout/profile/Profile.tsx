@@ -3,6 +3,8 @@ import ContentHeader from "../content/ContentHeader";
 import UserAvatar from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
 import ProfileInfo from "./ProfileInfo";
+import ProfileNavbar from "./ProfileNavbar";
+import { Outlet } from "react-router-dom";
 
 //this is content section
 const Profile = () => {
@@ -17,6 +19,10 @@ const Profile = () => {
         <Button variant={"outline"} className="border-white rounded-full relative left-[77%] bottom-28">Edit Profile</Button>
       </div>
       <ProfileInfo />
+      <ProfileNavbar />
+      <div className="w-full h-full">
+        <Outlet />
+      </div>
     </ScrollArea>
   );
 };
