@@ -10,7 +10,8 @@ import useLoading from "@/hooks/useLoading";
 
 //original tweet detail page
 const TweetDetail = () => {
-  const { tweetID } = useParams();
+  const { tweetID }:any = useParams();
+  console.log('tweetID',tweetID);
   const [comment, setComment] = useState([]);
   const { isLoading, setLoading } = useLoading();
   const [tweet, setTweet] = useState<tweet>({
@@ -46,12 +47,12 @@ const TweetDetail = () => {
   }, []);
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
-      <ContentHeader />
+      <ContentHeader text={"Post"} />
       <Tweet tweet={tweet} fromComment={false} detail={true} isTweet={true} />
       <Suspense fallback={<Loading />}>
         {!isLoading ? (
           comment.map((tweet: tweet) => {
-            return <Tweet key={tweet.id} tweet={tweet} isComment={true} />;
+            return <Tweet key={tweet.id} tweet={tweet} isComment={true} parentId={tweetID} />;
           })
         ) : (
           <Loading />
