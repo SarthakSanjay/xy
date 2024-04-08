@@ -10,7 +10,7 @@ const router = express.Router();
 
 //tweet
 router.route("/:userId/:id").put(likeTweet);
-router.route("/liked/:userId").get(userLikedTweet);
+router.route("/likedByUser").get(authMiddleware,userLikedTweet);
 router.route('/isLiked/:tweetId').get(authMiddleware,isLikedTweet)
 
 export default router;
