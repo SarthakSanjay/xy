@@ -47,19 +47,36 @@ export const likeTweet = async(req:Request , res:Response)=>{
         res.status(500).json({msg:"Internal server error"})
     }
 }
-export const userLikedTweet = async(req:Request, res:Response)=>{
-    const userId : number = parseInt(req.params.userId)
+export const userLikedTweet = async(req:CustomRequest, res:Response)=>{
+    const userId : number = parseInt(req.user?.id)
    try {
-     const likes = await prisma.like.findMany({
-         where:{
-             userId:userId
-         },
-         include:{tweet:true}
+     const tweet = await prisma.like.findMany({
+        where:{
+            userId:userId
+        },select:{
+            tweet:{
+              select:{
+                  id:true,
+                  text:true,
+                  reposts:true,
+                  likes:true,
+                  views:true,
+                  bookmarks :true,
+                  createOn:true,
+                  user:true,
+                  _count:{
+                    select:{
+                        comment:true
+                    }
+                  }
+              }
+            }
+        }
      })
      
      res.status(200).json({
          msg:'success',
-         likes:likes
+         tweet
      })
    } catch (error:any) {
     console.log(error.message);
@@ -70,7 +87,7 @@ export const userLikedTweet = async(req:Request, res:Response)=>{
 export const isLikedTweet = async(req:CustomRequest , res:Response)=>{
     const userId:number = req.user?.id
     const tweetId:number = parseInt(req.params.tweetId)
-    console.log('userID',userId,'tweetId',tweetId);
+    // console.log('userID',userId,'tweetId',tweetId);
     try {
       const liked =  await prisma.like.findFirst({
             where:{
