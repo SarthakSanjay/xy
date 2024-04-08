@@ -11,6 +11,7 @@ interface TweetProp extends TweetBoxTypes {
   tweet: tweet;
   fromComment?: boolean;
   detail?: boolean;
+  parentId?: number
 }
 
 //original tweet posted by user
@@ -20,8 +21,10 @@ const Tweet: React.FC<TweetProp> = ({
   isComment,
   detail,
   isChildComment,
-  isTweet
+  isTweet,
+  parentId
 }) => {
+  console.log("pid",parentId);
   return (
     <Card
       className={`${
@@ -54,7 +57,7 @@ const Tweet: React.FC<TweetProp> = ({
         <p>{tweet.id}</p>
 
         {isComment ? (
-          <Link to={`/${tweet.user.username}/comment/${tweet.id}`}>
+          <Link to={`/${tweet.user.username}/comment/${parentId}/${tweet.id}`}>
             <p className="mx-2">{tweet.text}</p>
           </Link>
         ) : (
