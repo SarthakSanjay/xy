@@ -131,3 +131,36 @@ export const getChildComments = async(req:Request,res:Response)=>{
        }
     
 }
+
+export const getCommentsByUserId = async(req:CustomRequest , res:Response)=>{
+    const userId = parseInt(req.user?.id)
+   try {
+     const comments = await prisma.comment.findMany({
+         where:{
+             userId:userId
+         },
+         select:{
+            id:true,
+            bookmarks:true,
+            likes:true,
+            reposts:true,
+            createOn:true,
+            text:true,
+            views:true,
+            user:true,
+            _count:{
+                select:{
+                    childComments:true
+                }
+            }
+         }
+     })
+     res.status(200).json({
+         comments
+     })
+   } catch (error :any) {
+    res.status(404).json({
+        msg : error.message
+    })
+   }
+}
