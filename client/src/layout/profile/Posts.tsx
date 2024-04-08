@@ -25,7 +25,7 @@ const Posts = () => {
     <div>
          {!isLoading ? (
           tweet.map((tweet: tweet) => {
-            return <Tweet key={tweet.id} tweet={tweet}  />;
+            return <Tweet key={tweet.id} tweet={tweet} isTweet={true}  />;
           })
         ) : (
           <Loading />
