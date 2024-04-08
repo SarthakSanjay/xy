@@ -11,6 +11,10 @@ import { Login } from './layout/auth/Login.tsx'
 import Notification from './layout/notification/Notification.tsx'
 import CommentDetail from './layout/content/CommentDetail.tsx'
 import Profile from './layout/profile/Profile.tsx'
+import Posts from './layout/profile/Posts.tsx'
+import LikedPost from './layout/profile/LikedPosts.tsx'
+import RepostedPosts from './layout/profile/RepostedPosts.tsx'
+import Replies from './layout/profile/Replies.tsx'
 
 
 const router = createBrowserRouter([
@@ -34,7 +38,26 @@ const router = createBrowserRouter([
       element:<Notification />
     },{
       path:'profile',
-      element:<Profile />
+      element:<Profile />,
+      children:[
+        {
+          path:"",
+          element:<Posts />
+        },
+        {
+          path:"repost",
+          element:<RepostedPosts />
+        },
+        {
+          path:"replies",
+          element:<Replies />
+        },
+        {
+          path:"likes",
+          element:<LikedPost />
+        },
+        
+      ]
     }
   ]
   },
