@@ -6,6 +6,7 @@ import tweetRouter from './routes/tweet'
 import commentRouter from './routes/comment'
 import likeRouter from './routes/like'
 import repostRouter from './routes/repost'
+import bookmarkRouter from './routes/bookmark'
 import cors from 'cors'
 const prisma = new PrismaClient();
 const app = express();
@@ -18,6 +19,7 @@ app.use('/tweet',tweetRouter)
 app.use('/comment',commentRouter)
 app.use('/like', likeRouter)
 app.use('/repost',repostRouter)
+app.use('/bookmark',bookmarkRouter)
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Express is working fine");
