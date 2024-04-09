@@ -15,6 +15,7 @@ import Posts from './layout/profile/Posts.tsx'
 import LikedPost from './layout/profile/LikedPosts.tsx'
 import RepostedPosts from './layout/profile/RepostedPosts.tsx'
 import Replies from './layout/profile/Replies.tsx'
+import Bookmark from './layout/bookmark/Bookmark.tsx'
 
 
 const router = createBrowserRouter([
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         },
         
       ]
+    },
+    {
+      path: 'bookmark',
+      element:<Bookmark />
     }
   ]
   },
