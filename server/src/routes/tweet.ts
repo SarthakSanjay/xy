@@ -4,8 +4,6 @@ import {
   getAllTweets,
   deleteTweet,
   allrepostAndLikes,
-  userBookmarkedTweet,
-  bookmarkTweet,
   getTweetById,
   getTweetByUserId,
 } from "../controllers/tweet";
@@ -19,8 +17,6 @@ router.route("/all").get(getAllTweets);
 router.route("/:tweetId").get(getTweetById);
 router.route("/user/tweets").get(authMiddleware,getTweetByUserId);
 router.route("/:id").delete(deleteTweet);
-router.route("/bookmark/:userId/:id").put(bookmarkTweet);
-router.route("/bookmarked/:userId").get(userBookmarkedTweet);
 
 router.route("/lr").get(allrepostAndLikes);
 
