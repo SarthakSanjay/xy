@@ -32,7 +32,7 @@ const PostActivity: React.FC<PostActivityProp> = ({
       <LikeBtn tweetId={tweet.id} />
       <ViewsBtn />
       <div className="mx-2 ">
-        <BookmarkBtn />
+        <BookmarkBtn tweetId={tweet.id} />
         <ShareBtn />
       </div>
     </div>
