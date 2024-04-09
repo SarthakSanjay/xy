@@ -106,64 +106,6 @@ export const deleteTweet = async(req:Request , res:Response) =>{
    }
 }
 
-export const bookmarkTweet = async(req:Request , res:Response)=>{
-    const tweetId :number = parseInt(req.params.id)
-    const userId :number = parseInt(req.params.userId) //change later
-    try {
-        const existingBookmark = await prisma.bookmark.findFirst({
-            where:{
-                tweetId:tweetId,
-                userId:userId
-            }
-        })
-        if (existingBookmark) {
-            await prisma.bookmark.delete({
-                where:{
-                    id:existingBookmark.id,
-                }
-            })
-            await prisma.tweet.update({
-                where:{id:tweetId},
-                data: {bookmarks:{decrement:1}}
-            })
-            return res.status(400).json({ msg: 'You have already bookmarked this tweet' });
-        }
-        await prisma.bookmark.create({
-            data:{
-                tweetId:tweetId,
-                userId:userId
-            }
-        })
-
-        await prisma.tweet.update({
-            where:{id:tweetId},
-            data: {bookmarks:{increment:1}}
-        })
-        res.status(200).json({
-            msg:"tweet bookmarked successfully"
-        })
-    } catch (error:any) {
-        console.log(error.message);
-        res.status(500).json({msg:"Internal server error"})
-    }
-}
-export const userBookmarkedTweet = async(req:Request , res:Response)=>{
-    const userId : number = parseInt(req.params.userId)
-   try {
-     const bookmarkedTweets = await prisma.bookmark.findMany({
-         where:{
-             userId:userId
-         },
-         include:{tweet:true}
-     })
-     res.status(200).json({
-         tweets:bookmarkedTweets
-     })
-   } catch (error:any) {
-    console.log(error.message);
-    res.status(500).json({msg:"Internal server error"})
-   }
-}
 export const allrepostAndLikes = async(req:Request,res:Response)=>{
    try {
      const likes = await prisma.like.findMany()
