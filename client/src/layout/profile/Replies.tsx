@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { tweet } from "../types/tweet"
 import axios from "axios"
 import useLoading from "@/hooks/useLoading"
 import Tweet from "../content/Tweet"
 import Loading from "@/components/Loading"
 import { TOKEN } from "@/utils/constant"
+import { stateContext } from "@/App"
 
 const Replies = () => {
     const [comment , setComment] = useState([])
     const { isLoading, setLoading } = useLoading();
+    const {setTotal,setText} = useContext(stateContext)
     console.log('replies comment',comment);
     useEffect(()=>{
         setLoading(true)
@@ -19,6 +21,8 @@ const Replies = () => {
         })
         .then((res)=>{
             setComment(res.data.comments)
+            setTotal(res.data.comments.length)
+            setText('Replies')
             setLoading(false)
         })
     },[])
