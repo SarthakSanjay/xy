@@ -2,13 +2,14 @@ import { Button } from "@/components/ui/button";
 import { TOKEN } from "@/utils/constant";
 import axios from "axios";
 import { FiBookmark } from "react-icons/fi";
+import { tweet } from "../types/tweet";
 
 interface BookmarkBtnProp {
-  tweetId : number
+  tweet : tweet
 }
-const BookmarkBtn : React.FC<BookmarkBtnProp> = ({tweetId}) => {
+const BookmarkBtn : React.FC<BookmarkBtnProp> = ({tweet}) => {
   const handleBookmark = () =>{
-    axios.put(`${import.meta.env.VITE_API_BASE_URL}/bookmark/${tweetId}`,null,{
+    axios.put(`${import.meta.env.VITE_API_BASE_URL}/bookmark/${tweet.id}`,null,{
       headers:{
         Authorization: `Bearer ${TOKEN}`
       }
@@ -20,7 +21,7 @@ const BookmarkBtn : React.FC<BookmarkBtnProp> = ({tweetId}) => {
       className="hover:text-sky-500 hover:bg-sky-500/30 rounded-full h-10 w-10 py-0 px-1"
       variant={"link2"}
     >
-      <FiBookmark />
+      <FiBookmark className={`${tweet.isBookmarked ? "text-sky-500":""}`} />
     </Button>
   );
 };
