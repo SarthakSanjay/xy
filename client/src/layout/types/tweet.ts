@@ -11,6 +11,7 @@ export interface tweet {
     };
     createOn: string;
     views: number;
+    isBookmarked :boolean;
   }
 
   export interface TweetBoxTypes {
