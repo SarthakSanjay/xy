@@ -27,6 +27,8 @@ model User {
   repost   Repost[]
   bookmark Bookmark[]
   comment  Comment[]
+  followedBy  Follow[]  @relation("followedBy")
+  following  Follow[]   @relation("following")
 }
 
 model Tweet {
@@ -37,6 +39,8 @@ model Tweet {
   likes        Int?     @default(0)
   views        Int?     @default(0)
   bookmarks    Int?     @default(0)
+  isLiked      Boolean  @default(false)
+  isBookmarked Boolean  @default(false)
   createOn     DateTime @default(now())
 
   user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -91,4 +95,15 @@ model Comment {
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   tweet Tweet? @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  id          Int    @id @default(autoincrement())
+  followedById  Int
+  followingId   Int
+
+  followedBy  User   @relation("followedBy", fields: [followedById], references: [id], onDelete: Cascade)
+  following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followedById, followingId])
 }
