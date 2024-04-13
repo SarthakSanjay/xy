@@ -93,13 +93,16 @@ export const updateUser = async(req:CustomRequest , res:Response) =>{
          return res.status(404).json({msg:"user not found"})
      }
  
-     const updatedUser = await prisma.user.update({
-         where:{id:id},
-         data:{
-             ...existingUser,
-             ...field
-         }
-     })
+     const updatedFields = Object.fromEntries(
+        Object.entries(field).filter(([key, value]) => value !== "")
+      );
+    
+      const updatedUser = await prisma.user.update({
+        where: { id: id },
+        data: updatedFields,
+      });
+
+     console.log('updateUser',updatedFields);
      res.status(200).json({
          msg: 'User updated',
          user: updatedUser,
