@@ -21,7 +21,9 @@ interface profile {
 }
 const ProfileInfo = () => {
   const [profile, setProfile] = useState<profile>({createOn:''});
-  console.log(profile);
+  const [followers , setFollowers] = useState(0)
+  const [following , setFollowing] = useState(0)
+  console.log(TOKEN);
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/profile`, {
@@ -32,27 +34,38 @@ const ProfileInfo = () => {
       .then((res) => {
         setProfile(res.data.user);
       });
+      //follow count
+      axios
+      .get(`${import.meta.env.VITE_API_BASE_URL}/follow/followCount`, {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      .then((res) => {
+        setFollowing(res.data.following);
+        setFollowers(res.data.followedBy);
+      });
   }, []);
   return (
     <div className="w-full px-5 ">
       <TypographyH4 text={`${profile.fullname}`} />
       <TypographyMuted text={`@${profile.username}`} />
-      <TypographyP text={`${profile.bio}`} />
+      <TypographyP text={`${profile.bio ?? "set bio"}`} />
       <div className="flex gap-5">
-        <TypographyMuted text={`${profile.designation}`} />
-        <TypographyMuted text={`${profile.location}`} />
+        <TypographyMuted text={`${profile.designation ?? 'set designation'}`} />
+        <TypographyMuted text={`${profile.location ?? 'set location'}`} />
       </div>
       <div className="flex gap-5">
-        <TypographyMuted text={`${profile.links}`} />
+        <TypographyMuted text={`${profile.links ?? 'your links'}`} />
         <TypographyMuted text={`Joined ${convertIntoMonthYear(profile.createOn)}`} />
       </div>
       <div className="flex gap-5">
         <div className="flex gap-1 items-center">
-          <TypographyP text={"50"} />
-          <TypographyMuted text="following" />
+          <TypographyP text={`${following}`} />
+          <TypographyMuted text="Following" />
         </div>
         <div className="flex gap-1 items-center">
-          <TypographyP text={"96"} />
+          <TypographyP text={`${followers}`} />
           <TypographyMuted text="Followers" />
         </div>
       </div>
