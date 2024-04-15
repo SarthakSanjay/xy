@@ -6,6 +6,7 @@ import { tweet } from "../types/tweet";
 import { Link } from "react-router-dom";
 import { calculateTimeDifference } from "@/utils/date";
 import { TweetBoxTypes } from "../types/tweet";
+import UserDetailCard from "./UserDetailCard";
 
 interface TweetProp extends TweetBoxTypes {
   tweet: tweet;
@@ -24,7 +25,7 @@ const Tweet: React.FC<TweetProp> = ({
   isTweet,
   parentId
 }) => {
-  console.log("pid",parentId);
+
   return (
     <Card
       className={`${
@@ -34,8 +35,9 @@ const Tweet: React.FC<TweetProp> = ({
       } 
     `}
     >
-      <div className=" flex flex-col items-center">
-        <UserAvatar />
+      <div className=" flex flex-col items-center ">
+       <UserDetailCard component={<UserAvatar />} tweet={tweet}/>
+
         {fromComment ? (
           <div className="w-[2px] my-1 rounded-full h-full bg-gray-500 "></div>
         ) : (
@@ -45,16 +47,22 @@ const Tweet: React.FC<TweetProp> = ({
       <div className="h-full w-full ">
         <div className="flex justify-between  ">
           <div className="flex gap-2 mx-2 text-gray-500">
-            <h1 className="text-black dark:text-white">
-              {tweet.user.fullname}
-            </h1>
-            <h2>{tweet.user.username}</h2>.
+            <UserDetailCard 
+              tweet={tweet}
+              component={
+                <div className="flex gap-2">
+                  <h1 className="text-black dark:text-white">
+                    {tweet?.user.fullname}
+                  </h1>
+                  <h2>@{tweet.user.username}</h2>.
+                </div>
+              } />
             <h2>
             {calculateTimeDifference(tweet.createOn)}</h2>
           </div>
           <More />
         </div>
-        <p>{tweet.id}</p>
+        {/* <p>{tweet.id}</p> */}
 
         {isComment ? (
           <Link to={`/${tweet.user.username}/comment/${parentId}/${tweet.id}`}>
