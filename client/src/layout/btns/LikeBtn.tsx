@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { IoMdHeartEmpty } from "react-icons/io";
 
 interface LikeBtnProps{
-    tweetId:number
+    tweetId:number,
+    totalLikes:number
 }
-const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId}) => {
+const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId ,totalLikes}) => {
     const [isLiked , setIsLiked] = useState<boolean>(false)
     useEffect(()=>{
         axios.get(`${import.meta.env.VITE_API_BASE_URL}/like/isLiked/${tweetId}`,{
@@ -37,6 +38,7 @@ const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId}) => {
       onClick={handleLike}
     >
       <IoMdHeartEmpty className={`${isLiked ? "text-pink-500" : ''}`} /> 
+      <span className="text-sm pl-1">{totalLikes}</span>
     </Button>
   );
 };

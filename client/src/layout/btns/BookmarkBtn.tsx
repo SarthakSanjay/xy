@@ -5,9 +5,10 @@ import { FiBookmark } from "react-icons/fi";
 import { tweet } from "../types/tweet";
 
 interface BookmarkBtnProp {
-  tweet : tweet
+  tweet : tweet,
+  totalBookmarks:number
 }
-const BookmarkBtn : React.FC<BookmarkBtnProp> = ({tweet}) => {
+const BookmarkBtn : React.FC<BookmarkBtnProp> = ({tweet,totalBookmarks}) => {
   const handleBookmark = () =>{
     axios.put(`${import.meta.env.VITE_API_BASE_URL}/bookmark/${tweet.id}`,null,{
       headers:{
@@ -22,6 +23,7 @@ const BookmarkBtn : React.FC<BookmarkBtnProp> = ({tweet}) => {
       variant={"link2"}
     >
       <FiBookmark className={`${tweet.isBookmarked ? "text-sky-500":""}`} />
+      <span className="text-sm pl-1">{totalBookmarks}</span>
     </Button>
   );
 };
