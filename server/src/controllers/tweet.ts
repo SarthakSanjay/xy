@@ -36,10 +36,27 @@ export const getAllTweets = async(req:Request , res:Response)=>{
               views:true,
               bookmarks :true,
               createOn:true,
-              user:true,
+              user:{
+                select:{
+                    id:true,
+                    fullname:true,
+                    username:true,
+                    bio:true,
+                    createOn:true,
+                    _count:{
+                        select:{
+                            followedBy:true,
+                            following:true,
+                        }
+                    }
+                }
+              },
               _count:{
                   select:{
-                      comment:true
+                      comment:true,
+                      bookmark:true,
+                      like:true,
+                      repost:true
                   }
               }
           }
