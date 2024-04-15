@@ -1,6 +1,12 @@
 export interface tweet {
     bookmarks: number;
-    _count: {comment:number,childComments:number};
+    _count: {
+      comment:number,
+      childComments:number,
+      repost:number,
+      like:number,
+      bookmark:number
+    };
     id:number;
     likes: number;
     reposts: number;
@@ -8,6 +14,11 @@ export interface tweet {
     user: {
       username: string;
       fullname: string;
+      bio: string;
+      _count: {
+        following: number;
+        followedBy:number;
+      }
     };
     createOn: string;
     views: number;
