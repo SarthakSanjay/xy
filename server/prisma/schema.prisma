@@ -35,12 +35,9 @@ model Tweet {
   id           Int      @id @unique @default(autoincrement())
   userId       Int
   text         String
-  reposts      Int?     @default(0)
-  likes        Int?     @default(0)
-  views        Int?     @default(0)
-  bookmarks    Int?     @default(0)
   isLiked      Boolean  @default(false)
   isBookmarked Boolean  @default(false)
+  isReposted   Boolean  @default(false)
   createOn     DateTime @default(now())
 
   user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
