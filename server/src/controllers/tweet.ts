@@ -31,10 +31,9 @@ export const getAllTweets = async(req:Request , res:Response)=>{
           select:{
               id:true,
               text:true,
-              reposts:true,
-              likes:true,
-              views:true,
-              bookmarks :true,
+              isBookmarked:true,
+              isLiked:true,
+              isReposted:true,
               createOn:true,
               user:{
                 select:{
@@ -81,15 +80,17 @@ export const getTweetById = async(req:Request,res:Response)=>{
           select:{
               id:true,
               text:true,
-              reposts:true,
-              likes:true,
-              views:true,
-              bookmarks :true,
+              isBookmarked:true,
+              isLiked:true,
+              isReposted:true,
               createOn:true,
               user:true,
               _count:{
                 select:{
-                    comment:true
+                    comment:true,
+                    bookmark:true,
+                    like:true,
+                    repost:true
                 }
               }
           }
@@ -146,15 +147,17 @@ export const getTweetByUserId = async(req:CustomRequest,res:Response)=>{
           select:{
               id:true,
               text:true,
-              reposts:true,
-              likes:true,
-              views:true,
-              bookmarks :true,
+              isBookmarked:true,
+              isLiked:true,
+              isReposted:true,
               createOn:true,
               user:true,
               _count:{
                 select:{
-                    comment:true
+                    comment:true,
+                    bookmark:true,
+                    like:true,
+                    repost:true
                 }
               }
           }

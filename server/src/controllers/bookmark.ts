@@ -20,10 +20,10 @@ export const bookmarkTweet = async(req:CustomRequest , res:Response)=>{
                     id:existingBookmark.id,
                 }
             })
-            await prisma.tweet.update({
-                where:{id:tweetId},
-                data: {bookmarks:{decrement:1},isBookmarked:false}
-            })
+            // await prisma.tweet.update({
+            //     where:{id:tweetId},
+            //     data: {bookmarks:{decrement:1},isBookmarked:false}
+            // })
             return res.status(400).json({ msg: 'You have already bookmarked this tweet' });
         }
         await prisma.bookmark.create({
@@ -35,7 +35,9 @@ export const bookmarkTweet = async(req:CustomRequest , res:Response)=>{
 
         await prisma.tweet.update({
             where:{id:tweetId},
-            data: {bookmarks:{increment:1},isBookmarked:true}
+            data: {
+            isBookmarked:true
+        }
         })
         res.status(200).json({
             msg:"tweet bookmarked successfully"
@@ -56,16 +58,17 @@ export const userBookmarkedTweet = async(req:CustomRequest , res:Response)=>{
               select:{
                   id:true,
                   text:true,
-                  reposts:true,
-                  likes:true,
-                  views:true,
-                  bookmarks :true,
                   isBookmarked:true,
+                  isReposted:true,
+                  isLiked:true,
                   createOn:true,
                   user:true,
                   _count:{
                     select:{
-                        comment:true
+                        comment:true,
+                        bookmark:true,
+                        like:true,
+                        repost:true
                     }
                   }
               }

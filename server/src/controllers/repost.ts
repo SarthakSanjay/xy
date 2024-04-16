@@ -21,10 +21,12 @@ export const repostTweet = async(req:CustomRequest , res:Response)=>{
                     id:existingRepost.id,
                 }
             })
-            await prisma.tweet.update({
-                where:{id:tweetId},
-                data: {reposts:{decrement:1}}
-            })
+            // await prisma.tweet.update({
+            //     where:{id:tweetId},
+            //     data: {
+            //         isReposted : false
+            //     }
+            // })
             return res.status(400).json({ msg: 'You have already reposted this tweet' });
         }
         await prisma.repost.create({
@@ -36,7 +38,9 @@ export const repostTweet = async(req:CustomRequest , res:Response)=>{
 
         await prisma.tweet.update({
             where:{id:tweetId},
-            data: {reposts:{increment:1}}
+            data: {
+                isReposted:true
+            }
         })
         res.status(200).json({
             msg:"tweet reposted successfully"
@@ -70,15 +74,17 @@ export const userRepostedTweets = async(req:CustomRequest , res:Response)=>{
                 select:{
                     id:true,
                     text:true,
-                    reposts:true,
-                    likes:true,
-                    views:true,
-                    bookmarks :true,
+                    isLiked:true,
+                    isBookmarked:true,
+                    isReposted:true,
                     createOn:true,
                     user:true,
                     _count:{
                       select:{
-                          comment:true
+                          comment:true,
+                          bookmark:true,
+                          like:true,
+                          repost:true
                       }
                     }
                 }

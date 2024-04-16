@@ -22,10 +22,10 @@ export const likeTweet = async(req:Request , res:Response)=>{
                     id:id
                 }
             })
-            await prisma.tweet.update({
-                where:{id:tweetId},
-                data: {likes:{decrement:1}}
-            })
+            // await prisma.tweet.update({
+            //     where:{id:tweetId},
+            //     data: {likes:{decrement:1}}
+            // })
             return res.status(200).json({ msg: 'like removed  ' });
         }
         await prisma.like.create({
@@ -37,7 +37,9 @@ export const likeTweet = async(req:Request , res:Response)=>{
 
         await prisma.tweet.update({
             where:{id:tweetId},
-            data: {likes:{increment:1}}
+            data: {
+                isLiked:true
+            }
         })
         res.status(200).json({
             msg:"tweet liked successfully"
@@ -58,15 +60,17 @@ export const userLikedTweet = async(req:CustomRequest, res:Response)=>{
               select:{
                   id:true,
                   text:true,
-                  reposts:true,
-                  likes:true,
-                  views:true,
-                  bookmarks :true,
+                  isBookmarked:true,
+                  isReposted:true,
+                  isLiked:true,
                   createOn:true,
                   user:true,
                   _count:{
                     select:{
-                        comment:true
+                        comment:true,
+                        bookmark:true,
+                        like:true,
+                        repost:true
                     }
                   }
               }
