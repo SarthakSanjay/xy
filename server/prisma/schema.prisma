@@ -27,6 +27,7 @@ model User {
   repost   Repost[]
   bookmark Bookmark[]
   comment  Comment[]
+   notification Notification[]
   followedBy  Follow[]  @relation("followedBy")
   following  Follow[]   @relation("following")
 }
@@ -45,6 +46,7 @@ model Tweet {
   repost   Repost[]
   bookmark Bookmark[]
   comment  Comment[]
+  notification Notification[]
 }
 
 model Like {
@@ -103,4 +105,25 @@ model Follow {
   following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followedById, followingId])
+}
+
+model Notification {
+  id          Int  @id @default(autoincrement())
+  type        NotiType
+  userId      Int
+  creatorId   Int
+  tweetId     Int
+  createOn    DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweet Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+
+  //  @@unique([userId, creatorId])
+}
+
+enum NotiType {
+  Liked 
+  Reposted
+  Followed
+  Commented
 }
