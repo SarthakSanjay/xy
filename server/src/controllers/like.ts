@@ -41,6 +41,15 @@ export const likeTweet = async(req:Request , res:Response)=>{
                 isLiked:true
             }
         })
+
+        await prisma.notification.create({
+            data:{
+                userId:userId,
+                tweetId:tweetId,
+                type :'Liked'
+            }
+        })
+
         res.status(200).json({
             msg:"tweet liked successfully"
         })
