@@ -8,6 +8,7 @@ import likeRouter from './routes/like'
 import repostRouter from './routes/repost'
 import bookmarkRouter from './routes/bookmark'
 import followRouter from './routes/follow'
+import notiRouter from './routes/notification'
 import cors from 'cors'
 const prisma = new PrismaClient();
 const app = express();
@@ -22,6 +23,7 @@ app.use('/like', likeRouter)
 app.use('/repost',repostRouter)
 app.use('/bookmark',bookmarkRouter)
 app.use('/follow',followRouter)
+app.use('/noti',notiRouter)
 app.get("/", (req: Request, res: Response) => {
     res.send("Express is working fine");
 });
