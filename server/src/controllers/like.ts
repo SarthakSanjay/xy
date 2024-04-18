@@ -41,10 +41,15 @@ export const likeTweet = async(req:Request , res:Response)=>{
                 isLiked:true
             }
         })
-
+        const tweet = await prisma.tweet.findUnique({
+            where:{
+                id:tweetId
+            }
+        })
         await prisma.notification.create({
+            // @ts-ignore
             data:{
-                userId:userId,
+                userId: tweet?.userId,
                 tweetId:tweetId,
                 type :'Liked'
             }
