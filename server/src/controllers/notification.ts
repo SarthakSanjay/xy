@@ -15,27 +15,25 @@ export const getNotification = async(req:CustomRequest ,res:Response) =>{
         },select:{
             id:true,
             type:true,
-            user:true,
+            user:{
+                select:{
+                    id:true,
+                    fullname:true,
+                    username:true
+                }
+            },
             tweet:{
                 select:{
-                    user:{
-                        select:{
-                            fullname:true,
-                            username:true
-                        }
-                    }
-                    
+                    id:true,
+                    text:true
                 }
             },
             createOn:true
         }
     })
-    const message = notifications.map(n =>{
-        return `${n.user.fullname} ${n.type} ${n.tweet.user.fullname}`
-    })
+
     res.status(200).json({
-        notifications,
-        message
+        notifications
     })
 }
 
@@ -45,6 +43,15 @@ export const getAllNotification = async(req:Request ,res:Response) =>{
             id:true,
             type:true,
             user:true,
+            targetId:true,
+            target:{
+                select:{
+                    id:true,
+                    fullname:true,
+                    username:true
+                    
+                }
+            },
             tweet:{
                 select:{
                     user:{
@@ -59,8 +66,8 @@ export const getAllNotification = async(req:Request ,res:Response) =>{
         }
     })
    const message = noti.map(n =>{
-        return `${n.user.fullname} ${n.type} ${n.tweet.user.fullname}`
+        return `${n.user.fullname} ${n.type} ${n.tweet?.user.fullname || n.target?.fullname }`
     })
-
+    console.log(noti);
     res.status(200).json({message})
 }
