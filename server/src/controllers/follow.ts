@@ -16,6 +16,15 @@ export const followUser = async(req:Request , res:Response) =>{
              followingId: followingId
          }
      })
+     await prisma.notification.create({
+        // @ts-ignore
+        data:{
+            userId: followedById,
+            type :'Followed',
+            targetId: followingId
+        }
+    })
+
      res.status(200).json({
         msg:  `${followedById} now following ${followingId}`,
         followedUser
