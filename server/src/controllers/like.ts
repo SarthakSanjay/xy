@@ -49,7 +49,7 @@ export const likeTweet = async(req:Request , res:Response)=>{
         await prisma.notification.create({
             // @ts-ignore
             data:{
-                userId: tweet?.userId,
+                userId: userId,
                 tweetId:tweetId,
                 type :'Liked'
             }
