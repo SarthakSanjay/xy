@@ -4,11 +4,10 @@ import { CustomRequest } from "../middleware/authMiddleware";
 
 const prisma = new PrismaClient();
 
-export const followUser = async(req:Request , res:Response) =>{
-    // const userId: number = parseInt(req.params.userId)
-    // const followedUserId: number = parseInt(req.params.followedUserId)
-    const {followedById , followingId} = req.body
-
+export const followUser = async(req:CustomRequest , res:Response) =>{
+    const followedById :number = req.user?.id 
+    const {followingId} = req.body
+    console.log('followedBy',followedById,'followingId', followingId);
    try {
      const followedUser = await prisma.follow.create({
          data:{
