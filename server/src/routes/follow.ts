@@ -4,7 +4,7 @@ import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
-router.route("/").post(followUser);
+router.route("/").post(authMiddleware,followUser);
 router.route('/followed/:id').get(getFollowerAndFollowings)
 router.route('/followCount').get(authMiddleware,getFollowerAndFollowingsCount)
 
