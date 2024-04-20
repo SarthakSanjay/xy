@@ -4,12 +4,24 @@ import { tweet } from "../types/tweet"
 import UserAvatar from "@/components/UserAvatar"
 import { Button } from "@/components/ui/button"
 import { TypographyMuted, TypographyP } from "@/components/typography/Typography"
+import axios from "axios"
+import { TOKEN } from "@/utils/constant"
 
 interface UserDetailCard {
   component : ReactNode,
   tweet ?: tweet
 }
 const UserDetailCard : React.FC<UserDetailCard> = ({component ,tweet}) => {
+  const handleFollow = () =>{
+    console.log("clicked");
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/follow`,{
+      followingId: tweet?.user.id
+    },{headers:{
+      Authorization: `Bearer ${TOKEN}`
+    }}).then(()=>{
+      alert(`followed ${tweet?.user.fullname}`)
+    })
+  }
   return (
     <HoverCard>
     <HoverCardTrigger asChild>
@@ -24,6 +36,7 @@ const UserDetailCard : React.FC<UserDetailCard> = ({component ,tweet}) => {
         <UserAvatar fromProfile={true} />
       </div>
       <Button
+      onClick={handleFollow}
          variant="outline" className="border-white rounded-full ">
           Follow
         </Button>
