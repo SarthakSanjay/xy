@@ -1,27 +1,26 @@
 import { tweet } from "@/layout/types/tweet";
 
 export const initialTweetState: tweet = {
-    bookmarks: 0,
-    _count: { 
-        comment: 0,
-        childComments: 0,
-        repost: 0,
-        bookmark : 0,
-        like: 0
-     },
     id: 0,
-    likes: 0,
-    reposts: 0,
     text: "",
+    isLiked: false,
+    isReposted:false,
+    isBookmarked:false,
     user: { 
-      username: "",
-       fullname: "",
+        id:0,
+        username: "",
+        fullname: "",
         bio:"" ,
-         _count:{
+        _count:{
             followedBy: 0,
             following :0
-         } },
-    createOn: "",
-    views: 0,
-    isBookmarked:false
+        } },
+        _count: { 
+            comment: 0,
+            childComments: 0,
+            repost: 0,
+            bookmark : 0,
+            like: 0
+        },
+        createOn: "",
   }
