@@ -4,14 +4,15 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const likeTweet = async(req:Request , res:Response)=>{
-    const tweetId :number = parseInt(req.params.id)
-    const userId :number = parseInt(req.params.userId) //change later
+export const likeTweet = async(req:CustomRequest , res:Response)=>{
+    const {tweetId , targetId} = req.body
+    const userId :number = parseInt(req.user?.id)
+  
     try {
         const existingLike = await prisma.like.findFirst({
             where:{
                 tweetId:tweetId,
-                userId:userId
+                userId:targetId
             }
         })
         if (existingLike) {
@@ -22,10 +23,6 @@ export const likeTweet = async(req:Request , res:Response)=>{
                     id:id
                 }
             })
-            // await prisma.tweet.update({
-            //     where:{id:tweetId},
-            //     data: {likes:{decrement:1}}
-            // })
             return res.status(200).json({ msg: 'like removed  ' });
         }
         await prisma.like.create({
@@ -41,20 +38,16 @@ export const likeTweet = async(req:Request , res:Response)=>{
                 isLiked:true
             }
         })
-        const tweet = await prisma.tweet.findUnique({
-            where:{
-                id:tweetId
-            }
-        })
-        await prisma.notification.create({
-            // @ts-ignore
+    
+         await prisma.notification.create({
             data:{
-                userId: userId,
-                tweetId:tweetId,
-                type :'Liked'
+                userId: userId ,
+                targetId:targetId,
+                type :'Liked',
+                tweetId:tweetId
             }
         })
-
+        console.log('userId',userId,'targetId',targetId);
         res.status(200).json({
             msg:"tweet liked successfully"
         })
