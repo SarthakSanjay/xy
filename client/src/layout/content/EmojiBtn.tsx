@@ -6,19 +6,19 @@ import {
 } from "@/components/ui/popover"
 import { Smile } from "lucide-react"
 import EmojiPicker from "emoji-picker-react"
-import { useContext } from "react"
-import { stateContext } from "@/App"
-export function EmojiBtn() {
-  const {setEmoji} = useContext(stateContext)
+
+interface EBprop {
+  handleEmojiClick : Function
+}
+export const EmojiBtn: React.FC<EBprop> = ({handleEmojiClick}) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost"><Smile /></Button>
       </PopoverTrigger>
       <PopoverContent className="w-max p-0">
-            <EmojiPicker theme={'dark'} height={400}  onEmojiClick={(n)=>{
-              setEmoji(n.emoji)
-            }}/>
+        {/* @ts-ignore */}
+            <EmojiPicker theme="auto" height={400} onEmojiClick={handleEmojiClick}/>
 
       </PopoverContent>
     </Popover>
