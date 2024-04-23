@@ -1,6 +1,5 @@
 import Logo from "@/components/Logo";
 import ProfileBar from "./Username";
-import { useNavigate } from "react-router-dom";
 import { PostBtn } from "./PostBtn";
 import HomeBtn from "./sidebarNavBtns/HomeBtn";
 import ExploreBtn from "./sidebarNavBtns/ExploreBtn";
