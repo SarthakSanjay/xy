@@ -1,32 +1,23 @@
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import { tweet } from "../types/tweet";
+import { TOKEN } from "@/utils/constant";
 
 interface LikeBtnProps{
-    tweetId:number,
-    totalLikes:number
+    tweet:tweet
 }
-const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId ,totalLikes}) => {
-    const [isLiked , setIsLiked] = useState<boolean>(false)
-    useEffect(()=>{
-        axios.get(`${import.meta.env.VITE_API_BASE_URL}/like/isLiked/${tweetId}`,{
+const LikeBtn: React.FC<LikeBtnProps>  = ({tweet}) => {
+
+    const handleLike = () =>{
+        axios.put(`${import.meta.env.VITE_API_BASE_URL}/like`,{
+          tweetId: tweet.id,
+          targetId : tweet.user?.id
+        },{
           headers:{
-            Authorization:`Bearer ${Cookies.get('token')}`
+            Authorization: `Bearer ${TOKEN}`
           }
         })
-        .then((res)=>{
-            if(res.data.isLikedTweet){
-                 setIsLiked(true)
-            }else{
-                setIsLiked(false)
-            }
-        })
-    },[isLiked])
-    const handleLike = () =>{
-        let userId = Cookies.get('userId')
-        axios.put(`${import.meta.env.VITE_API_BASE_URL}/like/${userId}/${tweetId}`)
         .then(()=>{
             alert("tweet liked")
         }).catch((error)=>console.log(error))
@@ -37,8 +28,12 @@ const LikeBtn: React.FC<LikeBtnProps>  = ({tweetId ,totalLikes}) => {
       variant={"link2"}
       onClick={handleLike}
     >
-      <IoMdHeartEmpty className={`${isLiked ? "text-pink-500" : ''}`} /> 
-      <span className="text-sm pl-1">{totalLikes}</span>
+      {
+        tweet.isLiked ?   <IoMdHeart className="text-pink-500" /> : <IoMdHeartEmpty  /> 
+      }
+      
+     
+      <span className="text-sm pl-1">{tweet._count.like}</span>
     </Button>
   );
 };
