@@ -11,8 +11,12 @@ import useLoading from "@/hooks/useLoading";
 //this is content section
 const Content = () => {
   const [posts, setPosts] = useState([]);
-  // const [isTweet , setIsTweet] = useState<boolean>(false)
   const { isLoading, setLoading } = useLoading();
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const handleFormSubmit = () => {
+    setFormSubmitted(prev => !prev);
+  };
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_BASE_URL}/tweet/all`).then((res) => {
@@ -20,13 +24,13 @@ const Content = () => {
       setPosts(res.data.tweets);
       setLoading(false);
     });
-  }, []);
+  }, [formSubmitted]);
 
   return (
     <ScrollArea className="w-full lg:w-[41.67%] border">
       <Header />
       <TweetBox
-        //  setIsTweet={setIsTweet}
+        onFormSubmit={handleFormSubmit}
         fromContent={true}
       />
       {!isLoading ? (
