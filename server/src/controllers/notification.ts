@@ -7,6 +7,17 @@ const prisma = new PrismaClient();
 export const getNotification = async(req:CustomRequest ,res:Response) =>{
     const userId : number = req.user?.id
     console.log("userId",userId);
+    await prisma.notification.updateMany(
+        {
+        where:{
+            targetId : userId,
+            isRead:false
+        },
+        data:{
+            isRead:true
+        }
+     }
+    )
     const noti = await prisma.notification.findMany({
         where:{
             targetId:userId
@@ -26,9 +37,15 @@ export const getNotification = async(req:CustomRequest ,res:Response) =>{
             }
         }
     })
+    const unreadCount = await prisma.notification.count({
+        where:{
+            targetId:userId,
+            isRead:false
+         }
+    })
     const latestNoti = noti.reverse()
     console.log(latestNoti);
-    res.status(200).json({latestNoti})
+    res.status(200).json({latestNoti,unreadCount})
 
 }
 
