@@ -103,3 +103,28 @@ export const userRepostedTweets = async(req:CustomRequest , res:Response)=>{
     res.status(500).json({msg:"Internal server error"})
 }
 }
+
+export const isReposted = async(req:CustomRequest , res:Response)=>{
+    const userId:number = req.user?.id
+    const tweetId:number = parseInt(req.params.tweetId)
+    // console.log('userID',userId,'tweetId',tweetId);
+    try {
+      const reposted =  await prisma.repost.findFirst({
+            where:{
+                userId:userId,
+                tweetId:tweetId
+            }
+        })
+        if(!reposted){
+           return res.status(200).json({
+                isRepostedTweet:false
+            })
+        }
+        res.status(200).json({
+            isRepostedTweet:true
+        })
+    } catch (error:any) {
+        console.log(error.message);
+        res.status(500).json({msg:"Internal server error"})
+    }
+}
